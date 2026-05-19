@@ -57,6 +57,8 @@ func main() {
 		}
 	}
 
+	client.RegisterLaunchCommand(appID, "awesome-go-wrapper://launch")
+
 	activity := sdk.NewActivity()
 	activity.SetType(sdk.ActivityTypePlaying)
 	activity.SetName("Go Wrapper Test")
