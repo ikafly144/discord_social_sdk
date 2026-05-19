@@ -63,6 +63,16 @@ func main() {
 	activity.SetState("Working on Go Wrapper")
 	activity.SetDetails("Implementing Discord Social SDK")
 
+	party := sdk.NewActivityParty()
+	party.SetID("test123")
+	party.SetCurrentSize(1)
+	party.SetMaxSize(5)
+	activity.SetParty(party)
+
+	secrets := sdk.NewActivitySecrets()
+	secrets.SetJoin("joinSecret")
+	activity.SetSecrets(secrets)
+
 	client.UpdateRichPresence(activity, func(err sdk.ErrorType) {
 		if err == sdk.ErrorTypeNone {
 			fmt.Println("Rich presence updated!")
