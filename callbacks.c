@@ -8,6 +8,7 @@ extern void goLogCallback(Discord_String message, Discord_LoggingSeverity severi
 extern void goFreeUserData(uintptr_t id);
 extern void goCreateOrJoinLobbyCallback(Discord_ClientResult* result, uint64_t lobbyId, uintptr_t id);
 extern void goLobbyCallback(uintptr_t id);
+extern void goLobbyMemberCallback(uint64_t lobbyId, uint64_t memberId, uintptr_t id);
 extern void goVoiceParticipantChangedCallback(uint64_t lobbyId, uint64_t memberId, bool added, uintptr_t id);
 extern void goStatusChangedCallback(int status, int error, int32_t errorDetail, uintptr_t id);
 extern void goMessageCallback(uint64_t messageId, uintptr_t id);
@@ -20,6 +21,8 @@ extern void goSimpleCallback(Discord_ClientResult* result, uintptr_t id);
 extern void goActivityInviteCallback(Discord_ActivityInvite* invite, uintptr_t id);
 extern void goActivityJoinCallback(Discord_String joinSecret, uintptr_t id);
 extern void goAcceptActivityInviteCallback(Discord_ClientResult* result, Discord_String joinSecret, uintptr_t id);
+
+extern void goIsInstalledCallback(bool installed, uintptr_t id);
 
 void updateRichPresence_c(Discord_ClientResult* result, void* userData) {
     goUpdateRichPresenceCallback(result, (uintptr_t)userData);
@@ -39,6 +42,10 @@ void createOrJoinLobby_c(Discord_ClientResult* result, uint64_t lobbyId, void* u
 
 void lobby_c(uint64_t lobbyId, void* userData) {
     goLobbyCallback((uintptr_t)userData);
+}
+
+void lobbyMember_c(uint64_t lobbyId, uint64_t memberId, void* userData) {
+    goLobbyMemberCallback(lobbyId, memberId, (uintptr_t)userData);
 }
 
 void voiceParticipantChanged_c(uint64_t lobbyId, uint64_t memberId, bool added, void* userData) {
@@ -79,4 +86,8 @@ void activityJoin_c(Discord_String joinSecret, void* userData) {
 
 void acceptActivityInvite_c(Discord_ClientResult* result, Discord_String joinSecret, void* userData) {
     goAcceptActivityInviteCallback(result, joinSecret, (uintptr_t)userData);
+}
+
+void isInstalled_c(bool installed, void* userData) {
+    goIsInstalledCallback(installed, (uintptr_t)userData);
 }

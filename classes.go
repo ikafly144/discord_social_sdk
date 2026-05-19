@@ -120,6 +120,20 @@ func fromDiscordString(s C.Discord_String) string {
 	return C.GoStringN((*C.char)(unsafe.Pointer(s.ptr)), C.int(s.size))
 }
 
+// Helper to convert Discord_Properties to Go map
+func fromDiscordProperties(p C.struct_Discord_Properties) map[string]string {
+	if p.size == 0 {
+		return nil
+	}
+	m := make(map[string]string, p.size)
+	keys := unsafe.Slice(p.keys, p.size)
+	values := unsafe.Slice(p.values, p.size)
+	for i := range keys {
+		m[fromDiscordString(keys[i])] = fromDiscordString(values[i])
+	}
+	return m
+}
+
 type Activity struct {
 	c C.struct_Discord_Activity
 }
@@ -435,8 +449,30 @@ type Lobby struct {
 	c C.struct_Discord_LobbyHandle
 }
 
+func (l *Lobby) ID() uint64 {
+	return uint64(C.Discord_LobbyHandle_Id(&l.c))
+}
+
+func (l *Lobby) Metadata() map[string]string {
+	var p C.struct_Discord_Properties
+	C.Discord_LobbyHandle_Metadata(&l.c, &p)
+	defer C.Discord_FreeProperties(p)
+	return fromDiscordProperties(p)
+}
+
 type LobbyMember struct {
 	c C.struct_Discord_LobbyMemberHandle
+}
+
+func (m *LobbyMember) ID() uint64 {
+	return uint64(C.Discord_LobbyMemberHandle_Id(&m.c))
+}
+
+func (m *LobbyMember) Metadata() map[string]string {
+	var p C.struct_Discord_Properties
+	C.Discord_LobbyMemberHandle_Metadata(&m.c, &p)
+	defer C.Discord_FreeProperties(p)
+	return fromDiscordProperties(p)
 }
 
 type Message struct {
