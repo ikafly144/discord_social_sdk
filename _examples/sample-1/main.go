@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	sdk "git.sabafly.net/ikafly144/discord_social_sdk"
+	sdk "github.com/ikafly144/discord_social_sdk"
 )
 
 func main() {
