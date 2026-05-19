@@ -1,5 +1,10 @@
 sdk/bin
 sdk/lib
 
+lib/*.dll
+lib/*.so
+lib/*.dylib
+lib/*.lib
+
 *.exe
 *.dll
