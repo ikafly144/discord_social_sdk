@@ -345,3 +345,75 @@ type AudioDevice struct {
 type UserMessageSummary struct {
 	c C.struct_Discord_UserMessageSummary
 }
+
+type ActivityActionType int
+
+const (
+	ActivityActionTypeInvalid     ActivityActionType = C.Discord_ActivityActionTypes_Invalid
+	ActivityActionTypeJoin        ActivityActionType = C.Discord_ActivityActionTypes_Join
+	ActivityActionTypeJoinRequest ActivityActionType = C.Discord_ActivityActionTypes_JoinRequest
+)
+
+type ActivityInvite struct {
+	c C.struct_Discord_ActivityInvite
+}
+
+func NewActivityInvite() *ActivityInvite {
+	i := &ActivityInvite{}
+	C.Discord_ActivityInvite_Init(&i.c)
+	runtime.SetFinalizer(i, func(i *ActivityInvite) {
+		C.Discord_ActivityInvite_Drop(&i.c)
+	})
+	return i
+}
+
+func (i *ActivityInvite) SenderID() uint64 {
+	return uint64(C.Discord_ActivityInvite_SenderId(&i.c))
+}
+
+func (i *ActivityInvite) Type() ActivityActionType {
+	return ActivityActionType(C.Discord_ActivityInvite_Type(&i.c))
+}
+
+type AuthorizationArgs struct {
+	c C.struct_Discord_AuthorizationArgs
+}
+
+func NewAuthorizationArgs() *AuthorizationArgs {
+	a := &AuthorizationArgs{}
+	C.Discord_AuthorizationArgs_Init(&a.c)
+	runtime.SetFinalizer(a, func(a *AuthorizationArgs) {
+		C.Discord_AuthorizationArgs_Drop(&a.c)
+	})
+	return a
+}
+
+func (a *AuthorizationArgs) SetClientID(id uint64) {
+	C.Discord_AuthorizationArgs_SetClientId(&a.c, C.uint64_t(id))
+}
+
+func (a *AuthorizationArgs) SetScopes(scopes string) {
+	s := toDiscordString(scopes)
+	defer freeDiscordString(s)
+	C.Discord_AuthorizationArgs_SetScopes(&a.c, s)
+}
+
+type AuthorizationTokenType int
+
+const (
+	AuthorizationTokenTypeUser   AuthorizationTokenType = C.Discord_AuthorizationTokenType_User
+	AuthorizationTokenTypeBearer AuthorizationTokenType = C.Discord_AuthorizationTokenType_Bearer
+)
+
+type ExternalAuthType int
+
+const (
+	ExternalAuthTypeOIDC                           ExternalAuthType = C.Discord_AuthenticationExternalAuthType_OIDC
+	ExternalAuthTypeEpicOnlineServicesAccessToken ExternalAuthType = C.Discord_AuthenticationExternalAuthType_EpicOnlineServicesAccessToken
+	ExternalAuthTypeEpicOnlineServicesIdToken      ExternalAuthType = C.Discord_AuthenticationExternalAuthType_EpicOnlineServicesIdToken
+	ExternalAuthTypeSteamSessionTicket           ExternalAuthType = C.Discord_AuthenticationExternalAuthType_SteamSessionTicket
+	ExternalAuthTypeUnityServicesIdToken          ExternalAuthType = C.Discord_AuthenticationExternalAuthType_UnityServicesIdToken
+	ExternalAuthTypeDiscordBotIssuedAccessToken   ExternalAuthType = C.Discord_AuthenticationExternalAuthType_DiscordBotIssuedAccessToken
+	ExternalAuthTypeAppleIdToken                  ExternalAuthType = C.Discord_AuthenticationExternalAuthType_AppleIdToken
+	ExternalAuthTypePlayStationNetworkIdToken     ExternalAuthType = C.Discord_AuthenticationExternalAuthType_PlayStationNetworkIdToken
+)
