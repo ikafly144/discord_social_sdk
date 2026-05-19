@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Social SDK Go Wrapper Implementation Notes</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { border-bottom: 2px solid #5865F2; padding-bottom: 10px; color: #5865F2; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 30px; }
+        .section { margin-bottom: 20px; }
+        .decision { border-left: 4px solid #5865F2; padding-left: 15px; background: #f9f9f9; padding: 10px; }
+        .deviation { border-left: 4px solid #ed4245; padding-left: 15px; background: #fff5f5; padding: 10px; }
+        .tradeoff { border-left: 4px solid #fee75c; padding-left: 15px; background: #fffdf0; padding: 10px; }
+        .open-question { border-left: 4px solid #3ba55c; padding-left: 15px; background: #f6fff9; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Discord Social SDK Go Wrapper Implementation Notes</h1>
+
+    <div class="section">
+        <h2>Design Decisions</h2>
+        <div class="decision">
+            <p><strong>Modular Architecture:</strong> The wrapper is split into several files based on functionality (e.g., <code>activity.go</code>, <code>lobby.go</code>, <code>voice.go</code>). This improves maintainability and allows users to easily find relevant methods.</p>
+        </div>
+        <div class="decision">
+            <p><strong>C Bridge (callbacks.c):</strong> A dedicated C file handles the mapping between C SDK callbacks and Go functions. This avoids cluttering the Go preamble and provides a clean separation between the Go wrapper and the underlying C API.</p>
+        </div>
+        <div class="decision">
+            <p><strong>Callback Registry:</strong> A global, thread-safe registry (<code>registry.go</code>) manages Go callbacks, using unique IDs passed via the SDK's <code>userData</code> pointer. This is the standard way to bridge asynchronous C callbacks to Go.</p>
+        </div>
+        <div class="decision">
+            <p><strong>Memory Management:</strong> Go's <code>runtime.SetFinalizer</code> is used extensively to call C <code>_Drop</code> functions, ensuring that opaque C structures are freed when the corresponding Go objects are garbage collected.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Deviations</h2>
+        <p>None yet.</p>
+    </div>
+
+    <div class="section">
+        <h2>Trade-offs</h2>
+        <div class="tradeoff">
+            <p><strong>String Handling:</strong> The C API uses <code>Discord_String</code> (pointer + size). I will convert these to Go <code>string</code> in getters and accept Go <code>string</code> in setters, performing the necessary C allocation/conversion internally. This makes the Go API idiomatic at the cost of some allocation overhead.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Open Questions</h2>
+        <div class="open-question">
+            <p><strong>Linking:</strong> Should we bundle the DLLs/libs or expect the user to provide them? Current plan is to assume they are in the project structure as provided.</p>
+        </div>
+        <div class="open-question">
+            <p><strong>Callback Registry:</strong> How to best handle multiple <code>Client</code> instances and their callbacks? A global registry mapping IDs to Go objects is the standard approach.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Unimplemented Features</h2>
+        <p>The following features from the C API (<code>cdiscord.h</code>) are currently NOT implemented in the Go wrapper:</p>
+        <ul>
+            <li><strong>Authorization System:</strong> Methods like <code>Authorize</code>, <code>GetToken</code>, <code>RefreshToken</code>, and OAuth2 flow handling.</li>
+            <li><strong>Advanced Lobby Management:</strong>
+                <ul>
+                    <li>Lobby metadata properties (<code>Discord_Properties</code> wrapping).</li>
+                    <li>Member metadata.</li>
+                    <li>Lobby events (<code>LobbyDeleted</code>, <code>LobbyMemberAdded/Removed/Updated</code>).</li>
+                    <li>Channel linking/unlinking to lobbies.</li>
+                </ul>
+            </li>
+            <li><strong>Granular Voice Control:</strong>
+                <ul>
+                    <li>Input/Output device selection and volume control.</li>
+                    <li>Audio processing settings (AEC, AGC, Noise Suppression/Cancellation).</li>
+                    <li>Raw audio capture and playback callbacks (<code>UserAudioReceived</code>, <code>UserAudioCaptured</code>).</li>
+                </ul>
+            </li>
+            <li><strong>Full Messaging Features:</strong>
+                <ul>
+                    <li>Editing and deleting messages.</li>
+                    <li>Lobby messages and message summaries.</li>
+                    <li>Message event callbacks (<code>MessageDeleted</code>, <code>MessageUpdated</code>).</li>
+                </ul>
+            </li>
+            <li><strong>Social & Relationships:</strong>
+                <ul>
+                    <li>Sending/Accepting friend requests.</li>
+                    <li>Blocking/Unblocking users.</li>
+                    <li>Searching friends by username.</li>
+                    <li>Relationship event callbacks (<code>RelationshipCreated/Deleted</code>).</li>
+                </ul>
+            </li>
+            <li><strong>Activity Interaction:</strong>
+                <ul>
+                    <li>Accepting and sending activity invites.</li>
+                    <li>Join request handling.</li>
+                    <li>Activity event callbacks (<code>ActivityInvite</code>, <code>ActivityJoin</code>).</li>
+                </ul>
+            </li>
+            <li><strong>System Integration:</strong>
+                <ul>
+                    <li>Steam/Launch command registration.</li>
+                    <li>Game window PID setting.</li>
+                    <li>Check if Discord is installed.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
