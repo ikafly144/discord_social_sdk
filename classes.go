@@ -304,6 +304,51 @@ func (a *Activity) Party() *ActivityParty {
 	return nil
 }
 
+type ActivitySecrets struct {
+	c C.struct_Discord_ActivitySecrets
+}
+
+func NewActivitySecrets() *ActivitySecrets {
+	s := &ActivitySecrets{}
+	C.Discord_ActivitySecrets_Init(&s.c)
+	runtime.SetFinalizer(s, func(s *ActivitySecrets) {
+		C.Discord_ActivitySecrets_Drop(&s.c)
+	})
+	return s
+}
+
+func (s *ActivitySecrets) SetJoin(join string) {
+	ds := toDiscordString(join)
+	defer freeDiscordString(ds)
+	C.Discord_ActivitySecrets_SetJoin(&s.c, ds)
+}
+
+func (s *ActivitySecrets) Join() string {
+	var ds C.Discord_String
+	C.Discord_ActivitySecrets_Join(&s.c, &ds)
+	return fromDiscordString(ds)
+}
+
+func (a *Activity) SetSecrets(secrets *ActivitySecrets) {
+	if secrets == nil {
+		C.Discord_Activity_SetSecrets(&a.c, nil)
+	} else {
+		C.Discord_Activity_SetSecrets(&a.c, &secrets.c)
+	}
+}
+
+func (a *Activity) Secrets() *ActivitySecrets {
+	secrets := &ActivitySecrets{}
+	C.Discord_ActivitySecrets_Init(&secrets.c)
+	if bool(C.Discord_Activity_Secrets(&a.c, &secrets.c)) {
+		runtime.SetFinalizer(secrets, func(s *ActivitySecrets) {
+			C.Discord_ActivitySecrets_Drop(&s.c)
+		})
+		return secrets
+	}
+	return nil
+}
+
 type ClientResult struct {
 	c C.struct_Discord_ClientResult
 }
