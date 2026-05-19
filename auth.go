@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include "discord.h"
 
 void authorization_c(Discord_ClientResult* result, Discord_String code, Discord_String redirectUri, void* userData);

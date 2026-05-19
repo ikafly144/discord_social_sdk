@@ -1,8 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
-#cgo LDFLAGS: -L${SRCDIR}/sdk/bin/release -ldiscord_partner_sdk
 #include "discord.h"
 
 extern void goUpdateRichPresenceCallback(Discord_ClientResult* result, uintptr_t id);

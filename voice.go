@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include <stdbool.h>
 #include "discord.h"
 

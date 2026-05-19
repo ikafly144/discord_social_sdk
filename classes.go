@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include <stdlib.h>
 #include "discord.h"
 */
@@ -18,8 +17,8 @@ const (
 	ErrorTypeNetworkError        ErrorType = C.Discord_ErrorType_NetworkError
 	ErrorTypeHTTPError           ErrorType = C.Discord_ErrorType_HTTPError
 	ErrorTypeClientNotReady      ErrorType = C.Discord_ErrorType_ClientNotReady
-	ErrorTypeDisabled             ErrorType = C.Discord_ErrorType_Disabled
-	ErrorTypeClientDestroyed      ErrorType = C.Discord_ErrorType_ClientDestroyed
+	ErrorTypeDisabled            ErrorType = C.Discord_ErrorType_Disabled
+	ErrorTypeClientDestroyed     ErrorType = C.Discord_ErrorType_ClientDestroyed
 	ErrorTypeValidationError     ErrorType = C.Discord_ErrorType_ValidationError
 	ErrorTypeAborted             ErrorType = C.Discord_ErrorType_Aborted
 	ErrorTypeAuthorizationFailed ErrorType = C.Discord_ErrorType_AuthorizationFailed
@@ -565,10 +564,10 @@ const (
 type ExternalAuthType int
 
 const (
-	ExternalAuthTypeOIDC                           ExternalAuthType = C.Discord_AuthenticationExternalAuthType_OIDC
+	ExternalAuthTypeOIDC                          ExternalAuthType = C.Discord_AuthenticationExternalAuthType_OIDC
 	ExternalAuthTypeEpicOnlineServicesAccessToken ExternalAuthType = C.Discord_AuthenticationExternalAuthType_EpicOnlineServicesAccessToken
-	ExternalAuthTypeEpicOnlineServicesIdToken      ExternalAuthType = C.Discord_AuthenticationExternalAuthType_EpicOnlineServicesIdToken
-	ExternalAuthTypeSteamSessionTicket           ExternalAuthType = C.Discord_AuthenticationExternalAuthType_SteamSessionTicket
+	ExternalAuthTypeEpicOnlineServicesIdToken     ExternalAuthType = C.Discord_AuthenticationExternalAuthType_EpicOnlineServicesIdToken
+	ExternalAuthTypeSteamSessionTicket            ExternalAuthType = C.Discord_AuthenticationExternalAuthType_SteamSessionTicket
 	ExternalAuthTypeUnityServicesIdToken          ExternalAuthType = C.Discord_AuthenticationExternalAuthType_UnityServicesIdToken
 	ExternalAuthTypeDiscordBotIssuedAccessToken   ExternalAuthType = C.Discord_AuthenticationExternalAuthType_DiscordBotIssuedAccessToken
 	ExternalAuthTypeAppleIdToken                  ExternalAuthType = C.Discord_AuthenticationExternalAuthType_AppleIdToken

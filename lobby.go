@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include "discord.h"
 
 void createOrJoinLobby_c(Discord_ClientResult* result, uint64_t lobbyId, void* userData);

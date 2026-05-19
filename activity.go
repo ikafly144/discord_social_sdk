@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include "discord.h"
 
 void updateRichPresence_c(Discord_ClientResult* result, void* userData);

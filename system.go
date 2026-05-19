@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include "discord.h"
 
 void isInstalled_c(bool installed, void* userData);

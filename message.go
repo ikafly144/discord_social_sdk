@@ -1,7 +1,6 @@
 package sdk
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include
 #include "discord.h"
 
 void message_c(uint64_t messageId, void* userData);
