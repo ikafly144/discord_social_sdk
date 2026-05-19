@@ -32,6 +32,9 @@
         <div class="decision">
             <p><strong>Memory Management:</strong> Go's <code>runtime.SetFinalizer</code> is used extensively to call C <code>_Drop</code> functions, ensuring that opaque C structures are freed when the corresponding Go objects are garbage collected.</p>
         </div>
+        <div class="decision">
+            <p><strong>Activity Party:</strong> Implemented <code>ActivityParty</code> and its association with <code>Activity</code>. This includes setting the party ID, size, and privacy status.</p>
+        </div>
     </div>
 
     <div class="section">

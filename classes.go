@@ -228,6 +228,82 @@ func (a *Activity) Assets() *ActivityAssets {
 	return nil
 }
 
+type ActivityPartyPrivacy int
+
+const (
+	ActivityPartyPrivacyPrivate ActivityPartyPrivacy = C.Discord_ActivityPartyPrivacy_Private
+	ActivityPartyPrivacyPublic  ActivityPartyPrivacy = C.Discord_ActivityPartyPrivacy_Public
+)
+
+type ActivityParty struct {
+	c C.struct_Discord_ActivityParty
+}
+
+func NewActivityParty() *ActivityParty {
+	p := &ActivityParty{}
+	C.Discord_ActivityParty_Init(&p.c)
+	runtime.SetFinalizer(p, func(p *ActivityParty) {
+		C.Discord_ActivityParty_Drop(&p.c)
+	})
+	return p
+}
+
+func (p *ActivityParty) SetID(id string) {
+	s := toDiscordString(id)
+	defer freeDiscordString(s)
+	C.Discord_ActivityParty_SetId(&p.c, s)
+}
+
+func (p *ActivityParty) ID() string {
+	var s C.Discord_String
+	C.Discord_ActivityParty_Id(&p.c, &s)
+	return fromDiscordString(s)
+}
+
+func (p *ActivityParty) SetCurrentSize(size int) {
+	C.Discord_ActivityParty_SetCurrentSize(&p.c, C.int32_t(size))
+}
+
+func (p *ActivityParty) CurrentSize() int {
+	return int(C.Discord_ActivityParty_CurrentSize(&p.c))
+}
+
+func (p *ActivityParty) SetMaxSize(size int) {
+	C.Discord_ActivityParty_SetMaxSize(&p.c, C.int32_t(size))
+}
+
+func (p *ActivityParty) MaxSize() int {
+	return int(C.Discord_ActivityParty_MaxSize(&p.c))
+}
+
+func (p *ActivityParty) SetPrivacy(privacy ActivityPartyPrivacy) {
+	C.Discord_ActivityParty_SetPrivacy(&p.c, C.Discord_ActivityPartyPrivacy(privacy))
+}
+
+func (p *ActivityParty) Privacy() ActivityPartyPrivacy {
+	return ActivityPartyPrivacy(C.Discord_ActivityParty_Privacy(&p.c))
+}
+
+func (a *Activity) SetParty(party *ActivityParty) {
+	if party == nil {
+		C.Discord_Activity_SetParty(&a.c, nil)
+	} else {
+		C.Discord_Activity_SetParty(&a.c, &party.c)
+	}
+}
+
+func (a *Activity) Party() *ActivityParty {
+	party := &ActivityParty{}
+	C.Discord_ActivityParty_Init(&party.c)
+	if bool(C.Discord_Activity_Party(&a.c, &party.c)) {
+		runtime.SetFinalizer(party, func(p *ActivityParty) {
+			C.Discord_ActivityParty_Drop(&p.c)
+		})
+		return party
+	}
+	return nil
+}
+
 type ClientResult struct {
 	c C.struct_Discord_ClientResult
 }
