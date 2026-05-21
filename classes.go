@@ -291,6 +291,90 @@ func (a *ActivityAssets) LargeImage() string {
 	return ""
 }
 
+func (a *ActivityAssets) SetLargeText(text string) {
+	s := toDiscordString(text)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetLargeText(&a.c, &s)
+}
+
+func (a *ActivityAssets) LargeText() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_LargeText(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
+func (a *ActivityAssets) SetLargeUrl(url string) {
+	s := toDiscordString(url)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetLargeUrl(&a.c, &s)
+}
+
+func (a *ActivityAssets) LargeUrl() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_LargeUrl(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
+func (a *ActivityAssets) SetSmallImage(image string) {
+	s := toDiscordString(image)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetSmallImage(&a.c, &s)
+}
+
+func (a *ActivityAssets) SmallImage() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_SmallImage(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
+func (a *ActivityAssets) SetSmallText(text string) {
+	s := toDiscordString(text)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetSmallText(&a.c, &s)
+}
+
+func (a *ActivityAssets) SmallText() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_SmallText(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
+func (a *ActivityAssets) SetSmallUrl(url string) {
+	s := toDiscordString(url)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetSmallUrl(&a.c, &s)
+}
+
+func (a *ActivityAssets) SmallUrl() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_SmallUrl(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
+func (a *ActivityAssets) SetInviteCoverImage(image string) {
+	s := toDiscordString(image)
+	defer freeDiscordString(s)
+	C.Discord_ActivityAssets_SetInviteCoverImage(&a.c, &s)
+}
+
+func (a *ActivityAssets) InviteCoverImage() string {
+	var s C.Discord_String
+	if bool(C.Discord_ActivityAssets_InviteCoverImage(&a.c, &s)) {
+		return fromDiscordString(s)
+	}
+	return ""
+}
+
 func (a *Activity) SetAssets(assets *ActivityAssets) {
 	if assets == nil {
 		C.Discord_Activity_SetAssets(&a.c, nil)
