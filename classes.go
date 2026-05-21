@@ -194,6 +194,76 @@ func (a *Activity) Details() string {
 	return ""
 }
 
+type ActivityGamePlatforms int
+
+const (
+	ActivityGamePlatformsDesktop  ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_Desktop
+	ActivityGamePlatformsXbox     ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_Xbox
+	ActivityGamePlatformsSamsung  ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_Samsung
+	ActivityGamePlatformsIOS      ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_IOS
+	ActivityGamePlatformsAndroid  ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_Android
+	ActivityGamePlatformsEmbedded ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_Embedded
+	ActivityGamePlatformsPS4      ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_PS4
+	ActivityGamePlatformsPS5      ActivityGamePlatforms = C.Discord_ActivityGamePlatforms_PS5
+)
+
+type ActivityTimestamps struct {
+	c C.struct_Discord_ActivityTimestamps
+}
+
+func NewActivityTimestamps() *ActivityTimestamps {
+	t := &ActivityTimestamps{}
+	C.Discord_ActivityTimestamps_Init(&t.c)
+	runtime.SetFinalizer(t, func(t *ActivityTimestamps) {
+		C.Discord_ActivityTimestamps_Drop(&t.c)
+	})
+	return t
+}
+
+func (t *ActivityTimestamps) SetStart(start uint64) {
+	C.Discord_ActivityTimestamps_SetStart(&t.c, C.uint64_t(start))
+}
+
+func (t *ActivityTimestamps) Start() uint64 {
+	return uint64(C.Discord_ActivityTimestamps_Start(&t.c))
+}
+
+func (t *ActivityTimestamps) SetEnd(end uint64) {
+	C.Discord_ActivityTimestamps_SetEnd(&t.c, C.uint64_t(end))
+}
+
+func (t *ActivityTimestamps) End() uint64 {
+	return uint64(C.Discord_ActivityTimestamps_End(&t.c))
+}
+
+func (a *Activity) SetTimestamps(timestamps *ActivityTimestamps) {
+	if timestamps == nil {
+		C.Discord_Activity_SetTimestamps(&a.c, nil)
+	} else {
+		C.Discord_Activity_SetTimestamps(&a.c, &timestamps.c)
+	}
+}
+
+func (a *Activity) Timestamps() *ActivityTimestamps {
+	timestamps := &ActivityTimestamps{}
+	C.Discord_ActivityTimestamps_Init(&timestamps.c)
+	if bool(C.Discord_Activity_Timestamps(&a.c, &timestamps.c)) {
+		runtime.SetFinalizer(timestamps, func(t *ActivityTimestamps) {
+			C.Discord_ActivityTimestamps_Drop(&t.c)
+		})
+		return timestamps
+	}
+	return nil
+}
+
+func (a *Activity) SetSupportedPlatforms(platforms ActivityGamePlatforms) {
+	C.Discord_Activity_SetSupportedPlatforms(&a.c, C.Discord_ActivityGamePlatforms(platforms))
+}
+
+func (a *Activity) SupportedPlatforms() ActivityGamePlatforms {
+	return ActivityGamePlatforms(C.Discord_Activity_SupportedPlatforms(&a.c))
+}
+
 type ActivityAssets struct {
 	c C.struct_Discord_ActivityAssets
 }
