@@ -52,7 +52,7 @@ func main() {
 		}
 		fmt.Println("Client is ready!")
 		UserHandle := client.GetCurrentUser()
-		fmt.Printf("Logged in as: %s#%s (ID: %d)\n", UserHandle.Username(), "0000", UserHandle.Id())
+		fmt.Printf("Logged in as: %s (ID: %d)\n", UserHandle.Username(), UserHandle.Id())
 
 		relationships := client.GetRelationships()
 		fmt.Printf("Relationships (%d):\n", len(relationships))
