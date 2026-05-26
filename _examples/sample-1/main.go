@@ -42,16 +42,16 @@ func main() {
 		}
 	}()
 
-	fmt.Println("Waiting for user info...")
+	fmt.Println("Waiting for UserHandle info...")
 	time.Sleep(2 * time.Second)
 
-	user := client.GetCurrentUser()
-	fmt.Printf("Logged in as: %s#%s (ID: %d)\n", user.Username(), "0000", user.ID())
+	UserHandle := client.GetCurrentUser()
+	fmt.Printf("Logged in as: %s#%s (ID: %d)\n", UserHandle.Username(), "0000", UserHandle.ID())
 
 	relationships := client.GetRelationships()
 	fmt.Printf("Relationships (%d):\n", len(relationships))
 	for _, r := range relationships {
-		u := r.User()
+		u := r.UserHandle()
 		if u != nil {
 			fmt.Printf("- %s (ID: %d) Type: %v\n", u.Username(), u.ID(), r.Type())
 		}
@@ -60,7 +60,7 @@ func main() {
 	client.RegisterLaunchCommand(appID, "awesome-go-wrapper://launch")
 
 	activity := sdk.NewActivity()
-	activity.SetType(sdk.ActivityTypePlaying)
+	activity.SetType(sdk.ActivityTypesPlaying)
 	activity.SetName("Go Wrapper Test")
 	activity.SetState("Working on Go Wrapper")
 	activity.SetDetails("Implementing Discord Social SDK")
@@ -86,3 +86,5 @@ func main() {
 	fmt.Println("Press Enter to exit")
 	fmt.Scanln()
 }
+
+
