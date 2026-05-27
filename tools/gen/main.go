@@ -8,6 +8,7 @@ package main
 enum CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData client_data);
 enum CXChildVisitResult visitCursorEnum(CXCursor cursor, CXCursor parent, CXClientData client_data);
 enum CXChildVisitResult visitCursorStruct(CXCursor cursor, CXCursor parent, CXClientData client_data);
+enum CXChildVisitResult visitCallbackParams(CXCursor cursor, CXCursor parent, CXClientData client_data);
 */
 import "C"
 
@@ -220,6 +221,15 @@ func goVisitCursorStruct(c, p *C.CXCursor, clientData unsafe.Pointer) C.enum_CXC
 	return C.CXChildVisit_Continue
 }
 
+//export goVisitCallbackParams
+func goVisitCallbackParams(c, p *C.CXCursor, clientData unsafe.Pointer) C.enum_CXChildVisitResult {
+	if C.clang_getCursorKind(*c) == C.CXCursor_ParmDecl {
+		names := (*[]string)(clientData)
+		*names = append(*names, getString(C.clang_getCursorSpelling(*c)))
+	}
+	return C.CXChildVisit_Continue
+}
+
 func (g *Generator) parseFunction(cursor C.CXCursor) {
 	name := getString(C.clang_getCursorSpelling(cursor))
 	retType, cRetType, retIsBool := mapCTypeToGo(C.clang_getCursorResultType(cursor))
@@ -269,12 +279,26 @@ func (g *Generator) parseCallback(cursor C.CXCursor) {
 	}
 
 	numArgs := int(C.clang_getNumArgTypes(proto))
+	var paramNames []string
+	C.clang_visitChildren(cursor, C.CXCursorVisitor(C.visitCallbackParams), C.CXClientData(unsafe.Pointer(&paramNames)))
+
 	var sigParts []string
 	for i := 0; i < numArgs; i++ {
 		argType := C.clang_getArgType(proto, C.uint(i))
 		goType, cType, isBool := mapCTypeToGo(argType)
-		argName := fmt.Sprintf("arg%d", i)
-		if i == numArgs-1 && (cType == "void*" || cType == "void *") { argName = "userData" }
+		
+		argName := ""
+		if i < len(paramNames) {
+			argName = paramNames[i]
+		}
+		if argName == "" {
+			argName = fmt.Sprintf("arg%d", i)
+		}
+		
+		if i == numArgs-1 && (cType == "void*" || cType == "void *") && (argName == "" || strings.Contains(argName, "arg")) {
+			argName = "userData"
+		}
+
 		cb.Args = append(cb.Args, Arg{
 			Name:   argName,
 			Type:   goType,
