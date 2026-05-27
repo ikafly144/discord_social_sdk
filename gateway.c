@@ -3,89 +3,9 @@
 #include "cdiscord.h"
 #include <stdlib.h>
 
-void goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(arg0, arg1, userData);
-}
-
 void goHandle_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, void* userData);
 void gateway_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, void* userData) {
 	goHandle_Discord_AudioDeviceSpan_voidPtr(arg0, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(arg0, arg1, userData);
-}
-
-void* goHandle_size_t(size_t arg0);
-void* gateway_size_t(size_t arg0) {
-	return goHandle_size_t(arg0);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
-void gateway_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData) {
-	goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_bool_voidPtr(bool arg0, void* userData);
-void gateway_bool_voidPtr(bool arg0, void* userData) {
-	goHandle_bool_voidPtr(arg0, userData);
-}
-
-void goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
-void gateway_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData) {
-	goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0, arg1, arg2, arg3, arg4, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
-void gateway_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData) {
-	goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(arg0, arg1, arg2, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
-void gateway_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData) {
-	goHandle_Discord_ClientResultPtr_voidPtr(arg0, userData);
-}
-
-void goHandle_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
-void gateway_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData) {
-	goHandle_uint64_t_Discord_String_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
-void gateway_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData) {
-	goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
-void gateway_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData) {
-	goHandle_uint64_t_uint64_t_voidPtr(arg0, arg1, userData);
 }
 
 void goHandle_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(int16_t* arg0, uint64_t arg1, int32_t arg2, uint64_t arg3, void* userData);
@@ -93,39 +13,29 @@ void gateway_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(int16_t* arg0, uint64_
 	goHandle_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(arg0, arg1, arg2, arg3, userData);
 }
 
-void goHandle_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
-void gateway_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData) {
-	goHandle_uint64_t_bool_voidPtr(arg0, arg1, userData);
-}
-
-void goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
-void gateway_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData) {
-	goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(arg0, arg1, arg2, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0, arg1, arg2, arg3, arg4, arg5, userData);
-}
-
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData) {
-	goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(arg0, arg1, arg2, userData);
-}
-
-void goHandle_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
-void gateway_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData) {
-	goHandle_uint64_t_uint64_t_bool_voidPtr(arg0, arg1, arg2, userData);
-}
-
-void goHandle_uint64_t_voidPtr(uint64_t arg0, void* userData);
-void gateway_uint64_t_voidPtr(uint64_t arg0, void* userData) {
-	goHandle_uint64_t_voidPtr(arg0, userData);
-}
-
 void goHandle_Discord_AudioDevicePtr_voidPtr(Discord_AudioDevice* arg0, void* userData);
 void gateway_Discord_AudioDevicePtr_voidPtr(Discord_AudioDevice* arg0, void* userData) {
 	goHandle_Discord_AudioDevicePtr_voidPtr(arg0, userData);
+}
+
+void goHandle_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
+void gateway_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData) {
+	goHandle_uint64_t_Discord_String_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
+void gateway_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData) {
+	goHandle_Discord_ClientResultPtr_voidPtr(arg0, userData);
+}
+
+void goHandle_bool_voidPtr(bool arg0, void* userData);
+void gateway_bool_voidPtr(bool arg0, void* userData) {
+	goHandle_bool_voidPtr(arg0, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0, arg1, arg2, arg3, arg4, userData);
 }
 
 void goHandle_uint64_t_int16_tPtr_uint64_t_int32_t_uint64_t_boolPtr_voidPtr(uint64_t arg0, int16_t* arg1, uint64_t arg2, int32_t arg3, uint64_t arg4, bool* arg5, void* userData);
@@ -138,14 +48,104 @@ void gateway_voidPtr(void* userData) {
 	goHandle_voidPtr(userData);
 }
 
-void goHandle_Discord_String_voidPtr(Discord_String arg0, void* userData);
-void gateway_Discord_String_voidPtr(Discord_String arg0, void* userData) {
-	goHandle_Discord_String_voidPtr(arg0, userData);
+void goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(arg0, arg1, userData);
 }
 
 void goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(Discord_Client_Status arg0, Discord_Client_Error arg1, int32_t arg2, void* userData);
 void gateway_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(Discord_Client_Status arg0, Discord_Client_Error arg1, int32_t arg2, void* userData) {
 	goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(arg0, arg1, arg2, userData);
+}
+
+void goHandle_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
+void gateway_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData) {
+	goHandle_uint64_t_uint64_t_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_uint64_t_voidPtr(uint64_t arg0, void* userData);
+void gateway_uint64_t_voidPtr(uint64_t arg0, void* userData) {
+	goHandle_uint64_t_voidPtr(arg0, userData);
+}
+
+void goHandle_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
+void gateway_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData) {
+	goHandle_uint64_t_bool_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(arg0, arg1, arg2, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0, arg1, arg2, arg3, arg4, arg5, userData);
+}
+
+void* goHandle_size_t(size_t arg0);
+void* gateway_size_t(size_t arg0) {
+	return goHandle_size_t(arg0);
+}
+
+void goHandle_Discord_String_voidPtr(Discord_String arg0, void* userData);
+void gateway_Discord_String_voidPtr(Discord_String arg0, void* userData) {
+	goHandle_Discord_String_voidPtr(arg0, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
+void gateway_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData) {
+	goHandle_uint64_t_uint64_t_bool_voidPtr(arg0, arg1, arg2, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
+void gateway_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
+void gateway_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData) {
+	goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(arg0, arg1, arg2, userData);
+}
+
+void goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
+void gateway_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData) {
+	goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
+void gateway_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData) {
+	goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(arg0, arg1, arg2, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData) {
+	goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(arg0, arg1, userData);
+}
+
+void goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
+void gateway_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData) {
+	goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(arg0, arg1, userData);
 }
 
 void goHandle_Discord_ActivityInvitePtr_voidPtr(Discord_ActivityInvite* arg0, void* userData);

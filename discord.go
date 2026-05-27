@@ -3,68 +3,69 @@
 package discord
 
 /*
-#cgo CFLAGS: -Iinclude
+#cgo CFLAGS: -I${SRCDIR}/include
+#cgo LDFLAGS: -L${SRCDIR}/sdk/lib/release -ldiscord_partner_sdk
 #include "cdiscord.h"
 #include <stdlib.h>
 
-void goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
 void goHandle_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, void* userData);
 void gateway_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
-void* goHandle_size_t(size_t arg0);
-void* gateway_size_t(size_t arg0);
-void goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
-void goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
-void gateway_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
-void goHandle_bool_voidPtr(bool arg0, void* userData);
-void gateway_bool_voidPtr(bool arg0, void* userData);
-void goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
-void gateway_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
-void goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
-void gateway_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
-void goHandle_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
-void gateway_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
-void goHandle_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
-void gateway_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
-void goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
-void gateway_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
-void goHandle_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
-void gateway_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
 void goHandle_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(int16_t* arg0, uint64_t arg1, int32_t arg2, uint64_t arg3, void* userData);
 void gateway_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(int16_t* arg0, uint64_t arg1, int32_t arg2, uint64_t arg3, void* userData);
-void goHandle_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
-void gateway_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
-void goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
-void gateway_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
-void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
-void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
-void goHandle_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
-void gateway_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
-void goHandle_uint64_t_voidPtr(uint64_t arg0, void* userData);
-void gateway_uint64_t_voidPtr(uint64_t arg0, void* userData);
 void goHandle_Discord_AudioDevicePtr_voidPtr(Discord_AudioDevice* arg0, void* userData);
 void gateway_Discord_AudioDevicePtr_voidPtr(Discord_AudioDevice* arg0, void* userData);
+void goHandle_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
+void gateway_uint64_t_Discord_String_voidPtr(uint64_t arg0, Discord_String arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
+void gateway_Discord_ClientResultPtr_voidPtr(Discord_ClientResult* arg0, void* userData);
+void goHandle_bool_voidPtr(bool arg0, void* userData);
+void gateway_bool_voidPtr(bool arg0, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_AuthorizationTokenType arg2, int32_t arg3, Discord_String arg4, void* userData);
 void goHandle_uint64_t_int16_tPtr_uint64_t_int32_t_uint64_t_boolPtr_voidPtr(uint64_t arg0, int16_t* arg1, uint64_t arg2, int32_t arg3, uint64_t arg4, bool* arg5, void* userData);
 void gateway_uint64_t_int16_tPtr_uint64_t_int32_t_uint64_t_boolPtr_voidPtr(uint64_t arg0, int16_t* arg1, uint64_t arg2, int32_t arg3, uint64_t arg4, bool* arg5, void* userData);
 void goHandle_voidPtr(void* userData);
 void gateway_voidPtr(void* userData);
-void goHandle_Discord_String_voidPtr(Discord_String arg0, void* userData);
-void gateway_Discord_String_voidPtr(Discord_String arg0, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildMinimalSpan arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(Discord_ClientResult* arg0, Discord_MessageHandleSpan arg1, void* userData);
 void goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(Discord_Client_Status arg0, Discord_Client_Error arg1, int32_t arg2, void* userData);
 void gateway_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(Discord_Client_Status arg0, Discord_Client_Error arg1, int32_t arg2, void* userData);
+void goHandle_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
+void gateway_uint64_t_uint64_t_voidPtr(uint64_t arg0, uint64_t arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(Discord_ClientResult* arg0, Discord_UserMessageSummarySpan arg1, void* userData);
+void goHandle_uint64_t_voidPtr(uint64_t arg0, void* userData);
+void gateway_uint64_t_voidPtr(uint64_t arg0, void* userData);
+void goHandle_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
+void gateway_uint64_t_bool_voidPtr(uint64_t arg0, bool arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, Discord_String arg2, Discord_AuthorizationTokenType arg3, int32_t arg4, Discord_String arg5, void* userData);
+void* goHandle_size_t(size_t arg0);
+void* gateway_size_t(size_t arg0);
+void goHandle_Discord_String_voidPtr(Discord_String arg0, void* userData);
+void gateway_Discord_String_voidPtr(Discord_String arg0, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_String_voidPtr(Discord_ClientResult* arg0, Discord_String arg1, void* userData);
+void goHandle_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
+void gateway_uint64_t_uint64_t_bool_voidPtr(uint64_t arg0, uint64_t arg1, bool arg2, void* userData);
+void goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
+void gateway_Discord_ClientResultPtr_uint64_t_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, void* userData);
+void goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
+void gateway_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(Discord_Call_Status arg0, Discord_Call_Error arg1, int32_t arg2, void* userData);
+void goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
+void gateway_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(Discord_AudioDeviceSpan arg0, Discord_AudioDeviceSpan arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
+void gateway_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(Discord_ClientResult* arg0, uint64_t arg1, Discord_String arg2, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(Discord_ClientResult* arg0, Discord_GuildChannelSpan arg1, void* userData);
+void goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
+void gateway_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr(Discord_ClientResult* arg0, Discord_UserHandle* arg1, void* userData);
+void goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
+void gateway_Discord_String_Discord_LoggingSeverity_voidPtr(Discord_String arg0, Discord_LoggingSeverity arg1, void* userData);
 void goHandle_Discord_ActivityInvitePtr_voidPtr(Discord_ActivityInvite* arg0, void* userData);
 void gateway_Discord_ActivityInvitePtr_voidPtr(Discord_ActivityInvite* arg0, void* userData);
 extern void goUnregisterCallback(void* userData);
@@ -96,28 +97,52 @@ func goUnregisterCallback(userData unsafe.Pointer) {
 	delete(callbackRegistry, uintptr(userData))
 }
 
-//export goHandle_uint64_t_voidPtr
-func goHandle_uint64_t_voidPtr(arg0 C.uint64_t, userData unsafe.Pointer) {
+//export goHandle_uint64_t_Discord_String_voidPtr
+func goHandle_uint64_t_Discord_String_voidPtr(arg0 C.uint64_t, arg1 C.Discord_String, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func(uint64))
-	cb(uint64(arg0))
+	cb := cbRaw.(func(uint64, string))
+	cb(uint64(arg0), discordStringToString(arg1))
 }
 
-//export goHandle_Discord_AudioDevicePtr_voidPtr
-func goHandle_Discord_AudioDevicePtr_voidPtr(arg0 *C.Discord_AudioDevice, userData unsafe.Pointer) {
+//export goHandle_Discord_ClientResultPtr_voidPtr
+func goHandle_Discord_ClientResultPtr_voidPtr(arg0 *C.Discord_ClientResult, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func(*Discord_AudioDevice))
-	cb((*Discord_AudioDevice)(unsafe.Pointer(arg0)))
+	cb := cbRaw.(func(*Discord_ClientResult))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)))
+}
+
+//export goHandle_bool_voidPtr
+func goHandle_bool_voidPtr(arg0 C.bool, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(bool))
+	cb(bool(arg0))
+}
+
+//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr
+func goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_AuthorizationTokenType, arg3 C.int32_t, arg4 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, string, Discord_AuthorizationTokenType, int32, string))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), Discord_AuthorizationTokenType(arg2), int32(arg3), discordStringToString(arg4))
 }
 
 //export goHandle_uint64_t_int16_tPtr_uint64_t_int32_t_uint64_t_boolPtr_voidPtr
@@ -144,54 +169,6 @@ func goHandle_voidPtr(userData unsafe.Pointer) {
 	cb()
 }
 
-//export goHandle_Discord_String_voidPtr
-func goHandle_Discord_String_voidPtr(arg0 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(string))
-	cb(discordStringToString(arg0))
-}
-
-//export goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr
-func goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(arg0 C.Discord_Client_Status, arg1 C.Discord_Client_Error, arg2 C.int32_t, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(Discord_Client_Status, Discord_Client_Error, int32))
-	cb(Discord_Client_Status(arg0), Discord_Client_Error(arg1), int32(arg2))
-}
-
-//export goHandle_Discord_ActivityInvitePtr_voidPtr
-func goHandle_Discord_ActivityInvitePtr_voidPtr(arg0 *C.Discord_ActivityInvite, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ActivityInvite))
-	cb((*Discord_ActivityInvite)(unsafe.Pointer(arg0)))
-}
-
-//export goHandle_Discord_ClientResultPtr_Discord_String_voidPtr
-func goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, string))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1))
-}
-
 //export goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr
 func goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_GuildMinimalSpan, userData unsafe.Pointer) {
 	callbackMu.Lock()
@@ -202,18 +179,6 @@ func goHandle_Discord_ClientResultPtr_Discord_GuildMinimalSpan_voidPtr(arg0 *C.D
 	}
 	cb := cbRaw.(func(*Discord_ClientResult, []Discord_GuildMinimal))
 	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), Discord_GuildMinimalSpanToSlice(arg1))
-}
-
-//export goHandle_Discord_AudioDeviceSpan_voidPtr
-func goHandle_Discord_AudioDeviceSpan_voidPtr(arg0 C.Discord_AudioDeviceSpan, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func([]Discord_AudioDevice))
-	cb(Discord_AudioDeviceSpanToSlice(arg0))
 }
 
 //export goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr
@@ -228,21 +193,28 @@ func goHandle_Discord_ClientResultPtr_Discord_MessageHandleSpan_voidPtr(arg0 *C.
 	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), Discord_MessageHandleSpanToSlice(arg1))
 }
 
-//export goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr
-func goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_GuildChannelSpan, userData unsafe.Pointer) {
+//export goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr
+func goHandle_Discord_Client_Status_Discord_Client_Error_int32_t_voidPtr(arg0 C.Discord_Client_Status, arg1 C.Discord_Client_Error, arg2 C.int32_t, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func(*Discord_ClientResult, []Discord_GuildChannel))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), Discord_GuildChannelSpanToSlice(arg1))
+	cb := cbRaw.(func(Discord_Client_Status, Discord_Client_Error, int32))
+	cb(Discord_Client_Status(arg0), Discord_Client_Error(arg1), int32(arg2))
 }
 
-//export goHandle_size_t
-func goHandle_size_t(arg0 C.size_t) unsafe.Pointer {
-	return (unsafe.Pointer)(nil)
+//export goHandle_uint64_t_uint64_t_voidPtr
+func goHandle_uint64_t_uint64_t_voidPtr(arg0 C.uint64_t, arg1 C.uint64_t, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(uint64, uint64))
+	cb(uint64(arg0), uint64(arg1))
 }
 
 //export goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr
@@ -255,6 +227,155 @@ func goHandle_Discord_ClientResultPtr_Discord_UserMessageSummarySpan_voidPtr(arg
 	}
 	cb := cbRaw.(func(*Discord_ClientResult, []Discord_UserMessageSummary))
 	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), Discord_UserMessageSummarySpanToSlice(arg1))
+}
+
+//export goHandle_uint64_t_voidPtr
+func goHandle_uint64_t_voidPtr(arg0 C.uint64_t, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(uint64))
+	cb(uint64(arg0))
+}
+
+//export goHandle_uint64_t_bool_voidPtr
+func goHandle_uint64_t_bool_voidPtr(arg0 C.uint64_t, arg1 C.bool, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(uint64, bool))
+	cb(uint64(arg0), bool(arg1))
+}
+
+//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr
+func goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, string, string))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), discordStringToString(arg2))
+}
+
+//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr
+func goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_String, arg3 C.Discord_AuthorizationTokenType, arg4 C.int32_t, arg5 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, string, string, Discord_AuthorizationTokenType, int32, string))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), discordStringToString(arg2), Discord_AuthorizationTokenType(arg3), int32(arg4), discordStringToString(arg5))
+}
+
+//export goHandle_size_t
+func goHandle_size_t(arg0 C.size_t) unsafe.Pointer {
+	return (unsafe.Pointer)(nil)
+}
+
+//export goHandle_Discord_String_voidPtr
+func goHandle_Discord_String_voidPtr(arg0 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(string))
+	cb(discordStringToString(arg0))
+}
+
+//export goHandle_Discord_ClientResultPtr_Discord_String_voidPtr
+func goHandle_Discord_ClientResultPtr_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, string))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1))
+}
+
+//export goHandle_uint64_t_uint64_t_bool_voidPtr
+func goHandle_uint64_t_uint64_t_bool_voidPtr(arg0 C.uint64_t, arg1 C.uint64_t, arg2 C.bool, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(uint64, uint64, bool))
+	cb(uint64(arg0), uint64(arg1), bool(arg2))
+}
+
+//export goHandle_Discord_ClientResultPtr_uint64_t_voidPtr
+func goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.uint64_t, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, uint64))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), uint64(arg1))
+}
+
+//export goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr
+func goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(arg0 C.Discord_Call_Status, arg1 C.Discord_Call_Error, arg2 C.int32_t, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(Discord_Call_Status, Discord_Call_Error, int32))
+	cb(Discord_Call_Status(arg0), Discord_Call_Error(arg1), int32(arg2))
+}
+
+//export goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr
+func goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(arg0 C.Discord_AudioDeviceSpan, arg1 C.Discord_AudioDeviceSpan, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func([]Discord_AudioDevice, []Discord_AudioDevice))
+	cb(Discord_AudioDeviceSpanToSlice(arg0), Discord_AudioDeviceSpanToSlice(arg1))
+}
+
+//export goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr
+func goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.uint64_t, arg2 C.Discord_String, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, uint64, string))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), uint64(arg1), discordStringToString(arg2))
+}
+
+//export goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr
+func goHandle_Discord_ClientResultPtr_Discord_GuildChannelSpan_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_GuildChannelSpan, userData unsafe.Pointer) {
+	callbackMu.Lock()
+	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
+	callbackMu.Unlock()
+	if !ok {
+		return
+	}
+	cb := cbRaw.(func(*Discord_ClientResult, []Discord_GuildChannel))
+	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), Discord_GuildChannelSpanToSlice(arg1))
 }
 
 //export goHandle_Discord_ClientResultPtr_Discord_UserHandlePtr_voidPtr
@@ -281,100 +402,28 @@ func goHandle_Discord_String_Discord_LoggingSeverity_voidPtr(arg0 C.Discord_Stri
 	cb(discordStringToString(arg0), Discord_LoggingSeverity(arg1))
 }
 
-//export goHandle_bool_voidPtr
-func goHandle_bool_voidPtr(arg0 C.bool, userData unsafe.Pointer) {
+//export goHandle_Discord_ActivityInvitePtr_voidPtr
+func goHandle_Discord_ActivityInvitePtr_voidPtr(arg0 *C.Discord_ActivityInvite, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func(bool))
-	cb(bool(arg0))
+	cb := cbRaw.(func(*Discord_ActivityInvite))
+	cb((*Discord_ActivityInvite)(unsafe.Pointer(arg0)))
 }
 
-//export goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr
-func goHandle_Discord_AudioDeviceSpan_Discord_AudioDeviceSpan_voidPtr(arg0 C.Discord_AudioDeviceSpan, arg1 C.Discord_AudioDeviceSpan, userData unsafe.Pointer) {
+//export goHandle_Discord_AudioDeviceSpan_voidPtr
+func goHandle_Discord_AudioDeviceSpan_voidPtr(arg0 C.Discord_AudioDeviceSpan, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func([]Discord_AudioDevice, []Discord_AudioDevice))
-	cb(Discord_AudioDeviceSpanToSlice(arg0), Discord_AudioDeviceSpanToSlice(arg1))
-}
-
-//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr
-func goHandle_Discord_ClientResultPtr_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_AuthorizationTokenType, arg3 C.int32_t, arg4 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, string, Discord_AuthorizationTokenType, int32, string))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), Discord_AuthorizationTokenType(arg2), int32(arg3), discordStringToString(arg4))
-}
-
-//export goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr
-func goHandle_Discord_ClientResultPtr_uint64_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.uint64_t, arg2 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, uint64, string))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), uint64(arg1), discordStringToString(arg2))
-}
-
-//export goHandle_Discord_ClientResultPtr_voidPtr
-func goHandle_Discord_ClientResultPtr_voidPtr(arg0 *C.Discord_ClientResult, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)))
-}
-
-//export goHandle_uint64_t_Discord_String_voidPtr
-func goHandle_uint64_t_Discord_String_voidPtr(arg0 C.uint64_t, arg1 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(uint64, string))
-	cb(uint64(arg0), discordStringToString(arg1))
-}
-
-//export goHandle_Discord_ClientResultPtr_uint64_t_voidPtr
-func goHandle_Discord_ClientResultPtr_uint64_t_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.uint64_t, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, uint64))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), uint64(arg1))
-}
-
-//export goHandle_uint64_t_uint64_t_voidPtr
-func goHandle_uint64_t_uint64_t_voidPtr(arg0 C.uint64_t, arg1 C.uint64_t, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(uint64, uint64))
-	cb(uint64(arg0), uint64(arg1))
+	cb := cbRaw.(func([]Discord_AudioDevice))
+	cb(Discord_AudioDeviceSpanToSlice(arg0))
 }
 
 //export goHandle_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr
@@ -389,64 +438,16 @@ func goHandle_int16_tPtr_uint64_t_int32_t_uint64_t_voidPtr(arg0 *C.int16_t, arg1
 	cb((*int16)(unsafe.Pointer(arg0)), uint64(arg1), int32(arg2), uint64(arg3))
 }
 
-//export goHandle_uint64_t_bool_voidPtr
-func goHandle_uint64_t_bool_voidPtr(arg0 C.uint64_t, arg1 C.bool, userData unsafe.Pointer) {
+//export goHandle_Discord_AudioDevicePtr_voidPtr
+func goHandle_Discord_AudioDevicePtr_voidPtr(arg0 *C.Discord_AudioDevice, userData unsafe.Pointer) {
 	callbackMu.Lock()
 	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
 	callbackMu.Unlock()
 	if !ok {
 		return
 	}
-	cb := cbRaw.(func(uint64, bool))
-	cb(uint64(arg0), bool(arg1))
-}
-
-//export goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr
-func goHandle_Discord_Call_Status_Discord_Call_Error_int32_t_voidPtr(arg0 C.Discord_Call_Status, arg1 C.Discord_Call_Error, arg2 C.int32_t, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(Discord_Call_Status, Discord_Call_Error, int32))
-	cb(Discord_Call_Status(arg0), Discord_Call_Error(arg1), int32(arg2))
-}
-
-//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr
-func goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_Discord_AuthorizationTokenType_int32_t_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_String, arg3 C.Discord_AuthorizationTokenType, arg4 C.int32_t, arg5 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, string, string, Discord_AuthorizationTokenType, int32, string))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), discordStringToString(arg2), Discord_AuthorizationTokenType(arg3), int32(arg4), discordStringToString(arg5))
-}
-
-//export goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr
-func goHandle_Discord_ClientResultPtr_Discord_String_Discord_String_voidPtr(arg0 *C.Discord_ClientResult, arg1 C.Discord_String, arg2 C.Discord_String, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(*Discord_ClientResult, string, string))
-	cb((*Discord_ClientResult)(unsafe.Pointer(arg0)), discordStringToString(arg1), discordStringToString(arg2))
-}
-
-//export goHandle_uint64_t_uint64_t_bool_voidPtr
-func goHandle_uint64_t_uint64_t_bool_voidPtr(arg0 C.uint64_t, arg1 C.uint64_t, arg2 C.bool, userData unsafe.Pointer) {
-	callbackMu.Lock()
-	cbRaw, ok := callbackRegistry[uintptr(unsafe.Pointer(userData))]
-	callbackMu.Unlock()
-	if !ok {
-		return
-	}
-	cb := cbRaw.(func(uint64, uint64, bool))
-	cb(uint64(arg0), uint64(arg1), bool(arg2))
+	cb := cbRaw.(func(*Discord_AudioDevice))
+	cb((*Discord_AudioDevice)(unsafe.Pointer(arg0)))
 }
 
 func stringToDiscordString(s string) C.Discord_String {
@@ -1614,8 +1615,14 @@ func (self *Discord_ActivityAssets) Clone(arg0 *Discord_ActivityAssets) {
 }
 
 // SetLargeImage wraps Discord_ActivityAssets_SetLargeImage
-func (self *Discord_ActivityAssets) SetLargeImage(value *string) {
-	C.Discord_ActivityAssets_SetLargeImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetLargeImage(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetLargeImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // LargeImage wraps Discord_ActivityAssets_LargeImage
@@ -1626,8 +1633,14 @@ func (self *Discord_ActivityAssets) LargeImage() (string, bool) {
 }
 
 // SetLargeText wraps Discord_ActivityAssets_SetLargeText
-func (self *Discord_ActivityAssets) SetLargeText(value *string) {
-	C.Discord_ActivityAssets_SetLargeText((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetLargeText(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetLargeText((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // LargeText wraps Discord_ActivityAssets_LargeText
@@ -1638,8 +1651,14 @@ func (self *Discord_ActivityAssets) LargeText() (string, bool) {
 }
 
 // SetLargeUrl wraps Discord_ActivityAssets_SetLargeUrl
-func (self *Discord_ActivityAssets) SetLargeUrl(value *string) {
-	C.Discord_ActivityAssets_SetLargeUrl((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetLargeUrl(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetLargeUrl((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // LargeUrl wraps Discord_ActivityAssets_LargeUrl
@@ -1650,8 +1669,14 @@ func (self *Discord_ActivityAssets) LargeUrl() (string, bool) {
 }
 
 // SetSmallImage wraps Discord_ActivityAssets_SetSmallImage
-func (self *Discord_ActivityAssets) SetSmallImage(value *string) {
-	C.Discord_ActivityAssets_SetSmallImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetSmallImage(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetSmallImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // SmallImage wraps Discord_ActivityAssets_SmallImage
@@ -1662,8 +1687,14 @@ func (self *Discord_ActivityAssets) SmallImage() (string, bool) {
 }
 
 // SetSmallText wraps Discord_ActivityAssets_SetSmallText
-func (self *Discord_ActivityAssets) SetSmallText(value *string) {
-	C.Discord_ActivityAssets_SetSmallText((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetSmallText(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetSmallText((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // SmallText wraps Discord_ActivityAssets_SmallText
@@ -1674,8 +1705,14 @@ func (self *Discord_ActivityAssets) SmallText() (string, bool) {
 }
 
 // SetSmallUrl wraps Discord_ActivityAssets_SetSmallUrl
-func (self *Discord_ActivityAssets) SetSmallUrl(value *string) {
-	C.Discord_ActivityAssets_SetSmallUrl((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetSmallUrl(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetSmallUrl((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // SmallUrl wraps Discord_ActivityAssets_SmallUrl
@@ -1686,8 +1723,14 @@ func (self *Discord_ActivityAssets) SmallUrl() (string, bool) {
 }
 
 // SetInviteCoverImage wraps Discord_ActivityAssets_SetInviteCoverImage
-func (self *Discord_ActivityAssets) SetInviteCoverImage(value *string) {
-	C.Discord_ActivityAssets_SetInviteCoverImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_ActivityAssets) SetInviteCoverImage(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_ActivityAssets_SetInviteCoverImage((*C.Discord_ActivityAssets)(unsafe.Pointer(self)), p_value)
 }
 
 // InviteCoverImage wraps Discord_ActivityAssets_InviteCoverImage
@@ -1939,8 +1982,14 @@ func (self *Discord_Activity) StatusDisplayType() (Discord_StatusDisplayTypes, b
 }
 
 // SetState wraps Discord_Activity_SetState
-func (self *Discord_Activity) SetState(value *string) {
-	C.Discord_Activity_SetState((*C.Discord_Activity)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_Activity) SetState(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_Activity_SetState((*C.Discord_Activity)(unsafe.Pointer(self)), p_value)
 }
 
 // State wraps Discord_Activity_State
@@ -1951,8 +2000,14 @@ func (self *Discord_Activity) State() (string, bool) {
 }
 
 // SetStateUrl wraps Discord_Activity_SetStateUrl
-func (self *Discord_Activity) SetStateUrl(value *string) {
-	C.Discord_Activity_SetStateUrl((*C.Discord_Activity)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_Activity) SetStateUrl(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_Activity_SetStateUrl((*C.Discord_Activity)(unsafe.Pointer(self)), p_value)
 }
 
 // StateUrl wraps Discord_Activity_StateUrl
@@ -1963,8 +2018,14 @@ func (self *Discord_Activity) StateUrl() (string, bool) {
 }
 
 // SetDetails wraps Discord_Activity_SetDetails
-func (self *Discord_Activity) SetDetails(value *string) {
-	C.Discord_Activity_SetDetails((*C.Discord_Activity)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_Activity) SetDetails(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_Activity_SetDetails((*C.Discord_Activity)(unsafe.Pointer(self)), p_value)
 }
 
 // Details wraps Discord_Activity_Details
@@ -1975,8 +2036,14 @@ func (self *Discord_Activity) Details() (string, bool) {
 }
 
 // SetDetailsUrl wraps Discord_Activity_SetDetailsUrl
-func (self *Discord_Activity) SetDetailsUrl(value *string) {
-	C.Discord_Activity_SetDetailsUrl((*C.Discord_Activity)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_Activity) SetDetailsUrl(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_Activity_SetDetailsUrl((*C.Discord_Activity)(unsafe.Pointer(self)), p_value)
 }
 
 // DetailsUrl wraps Discord_Activity_DetailsUrl
@@ -2297,8 +2364,14 @@ func (self *Discord_AuthorizationArgs) Scopes() string {
 }
 
 // SetState wraps Discord_AuthorizationArgs_SetState
-func (self *Discord_AuthorizationArgs) SetState(value *string) {
-	C.Discord_AuthorizationArgs_SetState((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_AuthorizationArgs) SetState(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_AuthorizationArgs_SetState((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), p_value)
 }
 
 // State wraps Discord_AuthorizationArgs_State
@@ -2309,8 +2382,14 @@ func (self *Discord_AuthorizationArgs) State() (string, bool) {
 }
 
 // SetNonce wraps Discord_AuthorizationArgs_SetNonce
-func (self *Discord_AuthorizationArgs) SetNonce(value *string) {
-	C.Discord_AuthorizationArgs_SetNonce((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_AuthorizationArgs) SetNonce(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_AuthorizationArgs_SetNonce((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), p_value)
 }
 
 // Nonce wraps Discord_AuthorizationArgs_Nonce
@@ -2345,8 +2424,14 @@ func (self *Discord_AuthorizationArgs) IntegrationType() (Discord_IntegrationTyp
 }
 
 // SetCustomSchemeParam wraps Discord_AuthorizationArgs_SetCustomSchemeParam
-func (self *Discord_AuthorizationArgs) SetCustomSchemeParam(value *string) {
-	C.Discord_AuthorizationArgs_SetCustomSchemeParam((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_AuthorizationArgs) SetCustomSchemeParam(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_AuthorizationArgs_SetCustomSchemeParam((*C.Discord_AuthorizationArgs)(unsafe.Pointer(self)), p_value)
 }
 
 // CustomSchemeParam wraps Discord_AuthorizationArgs_CustomSchemeParam
@@ -3202,8 +3287,14 @@ func (self *Discord_AdditionalContent) Type() Discord_AdditionalContentType {
 }
 
 // SetTitle wraps Discord_AdditionalContent_SetTitle
-func (self *Discord_AdditionalContent) SetTitle(value *string) {
-	C.Discord_AdditionalContent_SetTitle((*C.Discord_AdditionalContent)(unsafe.Pointer(self)), (*C.Discord_String)(unsafe.Pointer(value)))
+func (self *Discord_AdditionalContent) SetTitle(value string) {
+	var p_value *C.Discord_String
+	if value != "" {
+		c_value := stringToDiscordString(value)
+		defer freeDiscordString(c_value)
+		p_value = &c_value
+	}
+	C.Discord_AdditionalContent_SetTitle((*C.Discord_AdditionalContent)(unsafe.Pointer(self)), p_value)
 }
 
 // Title wraps Discord_AdditionalContent_Title

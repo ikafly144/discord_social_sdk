@@ -68,7 +68,8 @@ func main() {
 	authArgs := discord.NewAuthorizationArgs()
 	authArgs.SetClientId(appID)
 	authArgs.SetScopes(discord.Client_GetDefaultCommunicationScopes())
-	authArgs.SetCodeChallenge(new(codeVerifier.Challenge()))
+	challenge := codeVerifier.Challenge()
+	authArgs.SetCodeChallenge(&challenge)
 	client.Authorize(authArgs, func(arg0 *discord.Discord_ClientResult, arg1, arg2 string) {
 		if !arg0.Successful() {
 			fmt.Printf("Authorization failed: %v\n", arg0.Error())
@@ -98,8 +99,8 @@ func main() {
 	activity := discord.NewActivity()
 	activity.SetType(discord.Discord_ActivityTypes_Playing)
 	activity.SetName("Go Wrapper Test")
-	activity.SetState(new("Working on Go Wrapper"))
-	activity.SetDetails(new("Implementing Discord Social SDK"))
+	activity.SetState("Working on Go Wrapper")
+	activity.SetDetails("Implementing Discord Social SDK")
 
 	party := discord.NewActivityParty()
 	party.SetId("test123")
