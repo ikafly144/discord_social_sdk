@@ -2270,16 +2270,16 @@ func gateway_voidPtr(arg0 uintptr) uintptr {
 }
 
 func discordStringToString(ds *String) string {
-	if ds == nil || ds.Ptr == nil {
+	if ds == nil || ds.ptr == nil {
 		return ""
 	}
-	return string(unsafe.Slice(ds.Ptr, int(ds.Size)))
+	return string(unsafe.Slice(ds.ptr, int(ds.size)))
 }
 
 func stringToDiscordString(s string) String {
 	return String{
-		Ptr:  (*byte)(unsafe.Pointer(unsafe.StringData(s))),
-		Size: uintptr(len(s)),
+		ptr:  (*byte)(unsafe.Pointer(unsafe.StringData(s))),
+		size: uintptr(len(s)),
 	}
 }
 
@@ -2615,7 +2615,7 @@ const (
 )
 
 type Activity struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivity() *Activity {
@@ -2626,7 +2626,7 @@ func NewActivity() *Activity {
 }
 
 type ActivityAssets struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivityAssets() *ActivityAssets {
@@ -2637,7 +2637,7 @@ func NewActivityAssets() *ActivityAssets {
 }
 
 type ActivityButton struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivityButton() *ActivityButton {
@@ -2648,15 +2648,15 @@ func NewActivityButton() *ActivityButton {
 }
 
 type ActivityButtonSpan struct {
-	Ptr  *ActivityButton
-	Size uintptr
+	ptr  *ActivityButton
+	size uintptr
 }
 
 func ActivityButtonSpanToSlice(s ActivityButtonSpan) []ActivityButton {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToActivityButtonSpan(s []ActivityButton) ActivityButtonSpan {
@@ -2664,13 +2664,13 @@ func sliceToActivityButtonSpan(s []ActivityButton) ActivityButtonSpan {
 		return ActivityButtonSpan{}
 	}
 	return ActivityButtonSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type ActivityInvite struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivityInvite() *ActivityInvite {
@@ -2681,7 +2681,7 @@ func NewActivityInvite() *ActivityInvite {
 }
 
 type ActivityParty struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivityParty() *ActivityParty {
@@ -2692,7 +2692,7 @@ func NewActivityParty() *ActivityParty {
 }
 
 type ActivitySecrets struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivitySecrets() *ActivitySecrets {
@@ -2703,7 +2703,7 @@ func NewActivitySecrets() *ActivitySecrets {
 }
 
 type ActivityTimestamps struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewActivityTimestamps() *ActivityTimestamps {
@@ -2714,7 +2714,7 @@ func NewActivityTimestamps() *ActivityTimestamps {
 }
 
 type AdditionalContent struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewAdditionalContent() *AdditionalContent {
@@ -2725,24 +2725,24 @@ func NewAdditionalContent() *AdditionalContent {
 }
 
 type Allocator struct {
-	FnMalloc uintptr
-	FnFree   uintptr
+	fnMalloc uintptr
+	fnFree   uintptr
 }
 
 type AudioDevice struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type AudioDeviceSpan struct {
-	Ptr  *AudioDevice
-	Size uintptr
+	ptr  *AudioDevice
+	size uintptr
 }
 
 func AudioDeviceSpanToSlice(s AudioDeviceSpan) []AudioDevice {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToAudioDeviceSpan(s []AudioDevice) AudioDeviceSpan {
@@ -2750,13 +2750,13 @@ func sliceToAudioDeviceSpan(s []AudioDevice) AudioDeviceSpan {
 		return AudioDeviceSpan{}
 	}
 	return AudioDeviceSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type AuthorizationArgs struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewAuthorizationArgs() *AuthorizationArgs {
@@ -2767,7 +2767,7 @@ func NewAuthorizationArgs() *AuthorizationArgs {
 }
 
 type AuthorizationCodeChallenge struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewAuthorizationCodeChallenge() *AuthorizationCodeChallenge {
@@ -2778,27 +2778,27 @@ func NewAuthorizationCodeChallenge() *AuthorizationCodeChallenge {
 }
 
 type AuthorizationCodeVerifier struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type Call struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type CallInfoHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type CallSpan struct {
-	Ptr  *Call
-	Size uintptr
+	ptr  *Call
+	size uintptr
 }
 
 func CallSpanToSlice(s CallSpan) []Call {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToCallSpan(s []Call) CallSpan {
@@ -2806,17 +2806,17 @@ func sliceToCallSpan(s []Call) CallSpan {
 		return CallSpan{}
 	}
 	return CallSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type ChannelHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type Client struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewClient() *Client {
@@ -2827,7 +2827,7 @@ func NewClient() *Client {
 }
 
 type ClientCreateOptions struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewClientCreateOptions() *ClientCreateOptions {
@@ -2838,11 +2838,11 @@ func NewClientCreateOptions() *ClientCreateOptions {
 }
 
 type ClientResult struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type DeviceAuthorizationArgs struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewDeviceAuthorizationArgs() *DeviceAuthorizationArgs {
@@ -2853,19 +2853,19 @@ func NewDeviceAuthorizationArgs() *DeviceAuthorizationArgs {
 }
 
 type GuildChannel struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type GuildChannelSpan struct {
-	Ptr  *GuildChannel
-	Size uintptr
+	ptr  *GuildChannel
+	size uintptr
 }
 
 func GuildChannelSpanToSlice(s GuildChannelSpan) []GuildChannel {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToGuildChannelSpan(s []GuildChannel) GuildChannelSpan {
@@ -2873,25 +2873,25 @@ func sliceToGuildChannelSpan(s []GuildChannel) GuildChannelSpan {
 		return GuildChannelSpan{}
 	}
 	return GuildChannelSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type GuildMinimal struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type GuildMinimalSpan struct {
-	Ptr  *GuildMinimal
-	Size uintptr
+	ptr  *GuildMinimal
+	size uintptr
 }
 
 func GuildMinimalSpanToSlice(s GuildMinimalSpan) []GuildMinimal {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToGuildMinimalSpan(s []GuildMinimal) GuildMinimalSpan {
@@ -2899,17 +2899,17 @@ func sliceToGuildMinimalSpan(s []GuildMinimal) GuildMinimalSpan {
 		return GuildMinimalSpan{}
 	}
 	return GuildMinimalSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type LinkedChannel struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type LinkedLobby struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 func NewLinkedLobby() *LinkedLobby {
@@ -2920,23 +2920,23 @@ func NewLinkedLobby() *LinkedLobby {
 }
 
 type LobbyHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type LobbyMemberHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type LobbyMemberHandleSpan struct {
-	Ptr  *LobbyMemberHandle
-	Size uintptr
+	ptr  *LobbyMemberHandle
+	size uintptr
 }
 
 func LobbyMemberHandleSpanToSlice(s LobbyMemberHandleSpan) []LobbyMemberHandle {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToLobbyMemberHandleSpan(s []LobbyMemberHandle) LobbyMemberHandleSpan {
@@ -2944,25 +2944,25 @@ func sliceToLobbyMemberHandleSpan(s []LobbyMemberHandle) LobbyMemberHandleSpan {
 		return LobbyMemberHandleSpan{}
 	}
 	return LobbyMemberHandleSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type MessageHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type MessageHandleSpan struct {
-	Ptr  *MessageHandle
-	Size uintptr
+	ptr  *MessageHandle
+	size uintptr
 }
 
 func MessageHandleSpanToSlice(s MessageHandleSpan) []MessageHandle {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToMessageHandleSpan(s []MessageHandle) MessageHandleSpan {
@@ -2970,31 +2970,31 @@ func sliceToMessageHandleSpan(s []MessageHandle) MessageHandleSpan {
 		return MessageHandleSpan{}
 	}
 	return MessageHandleSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type Properties struct {
-	Size   uintptr
-	Keys   *String
-	Values *String
+	size   uintptr
+	keys   *String
+	values *String
 }
 
 type RelationshipHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type RelationshipHandleSpan struct {
-	Ptr  *RelationshipHandle
-	Size uintptr
+	ptr  *RelationshipHandle
+	size uintptr
 }
 
 func RelationshipHandleSpanToSlice(s RelationshipHandleSpan) []RelationshipHandle {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToRelationshipHandleSpan(s []RelationshipHandle) RelationshipHandleSpan {
@@ -3002,26 +3002,26 @@ func sliceToRelationshipHandleSpan(s []RelationshipHandle) RelationshipHandleSpa
 		return RelationshipHandleSpan{}
 	}
 	return RelationshipHandleSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type String struct {
-	Ptr  *uint8
-	Size uintptr
+	ptr  *uint8
+	size uintptr
 }
 
 type UInt64Span struct {
-	Ptr  *uint64
-	Size uintptr
+	ptr  *uint64
+	size uintptr
 }
 
 func UInt64SpanToSlice(s UInt64Span) []uint64 {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToUInt64Span(s []uint64) UInt64Span {
@@ -3029,25 +3029,25 @@ func sliceToUInt64Span(s []uint64) UInt64Span {
 		return UInt64Span{}
 	}
 	return UInt64Span{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type UserApplicationProfileHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type UserApplicationProfileHandleSpan struct {
-	Ptr  *UserApplicationProfileHandle
-	Size uintptr
+	ptr  *UserApplicationProfileHandle
+	size uintptr
 }
 
 func UserApplicationProfileHandleSpanToSlice(s UserApplicationProfileHandleSpan) []UserApplicationProfileHandle {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToUserApplicationProfileHandleSpan(s []UserApplicationProfileHandle) UserApplicationProfileHandleSpan {
@@ -3055,25 +3055,25 @@ func sliceToUserApplicationProfileHandleSpan(s []UserApplicationProfileHandle) U
 		return UserApplicationProfileHandleSpan{}
 	}
 	return UserApplicationProfileHandleSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type UserHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type UserHandleSpan struct {
-	Ptr  *UserHandle
-	Size uintptr
+	ptr  *UserHandle
+	size uintptr
 }
 
 func UserHandleSpanToSlice(s UserHandleSpan) []UserHandle {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToUserHandleSpan(s []UserHandle) UserHandleSpan {
@@ -3081,25 +3081,25 @@ func sliceToUserHandleSpan(s []UserHandle) UserHandleSpan {
 		return UserHandleSpan{}
 	}
 	return UserHandleSpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type UserMessageSummary struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type UserMessageSummarySpan struct {
-	Ptr  *UserMessageSummary
-	Size uintptr
+	ptr  *UserMessageSummary
+	size uintptr
 }
 
 func UserMessageSummarySpanToSlice(s UserMessageSummarySpan) []UserMessageSummary {
-	if s.Ptr == nil {
+	if s.ptr == nil {
 		return nil
 	}
-	return unsafe.Slice(s.Ptr, int(s.Size))
+	return unsafe.Slice(s.ptr, int(s.size))
 }
 
 func sliceToUserMessageSummarySpan(s []UserMessageSummary) UserMessageSummarySpan {
@@ -3107,17 +3107,17 @@ func sliceToUserMessageSummarySpan(s []UserMessageSummary) UserMessageSummarySpa
 		return UserMessageSummarySpan{}
 	}
 	return UserMessageSummarySpan{
-		Ptr:  &s[0],
-		Size: uintptr(len(s)),
+		ptr:  &s[0],
+		size: uintptr(len(s)),
 	}
 }
 
 type VADThresholdSettings struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type VoiceStateHandle struct {
-	Opaque unsafe.Pointer
+	opaque unsafe.Pointer
 }
 
 type CallOnParticipantChanged func(UserId uint64, Added bool)

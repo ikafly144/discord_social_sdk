@@ -512,6 +512,18 @@ func sanitizeGoName(name string) string {
 	return res
 }
 
+func sanitizeGoNamePrivate(name string) string {
+	res := sanitizeGoName(name)
+	if res == "" {
+		return ""
+	}
+	res = strings.ToLower(res[:1]) + res[1:]
+	if goKeywords[res] {
+		return res + "_"
+	}
+	return res
+}
+
 func stripDiscordPrefix(name string) string {
 	return strings.TrimPrefix(name, "Discord_")
 }
@@ -637,7 +649,8 @@ func (g *Generator) generate() {
 		}
 		buf.WriteString(")")
 		if f.ReturnType != "" && !f.ReturnsStruct {
-			buf.WriteString(" " + toGoType(g.mapToFFIType(f.ReturnType, f.CReturnType)))
+			buf.WriteString(" ")
+			buf.WriteString(toGoType(g.mapToFFIType(f.ReturnType, f.CReturnType)))
 		}
 		buf.WriteString("\n")
 	}
@@ -800,7 +813,8 @@ func (g *Generator) generate() {
 			buf.WriteString(")")
 			if cb.ReturnType != "" {
 				goRetType := toGoType(cb.ReturnType)
-				buf.WriteString(" " + goRetType)
+				buf.WriteString(" ")
+				buf.WriteString(goRetType)
 			}
 			buf.WriteString(")\n")
 
@@ -844,8 +858,8 @@ func (g *Generator) generate() {
 		}
 	}
 
-	buf.WriteString("func discordStringToString(ds *String) string {\n\tif ds == nil || ds.Ptr == nil { return \"\" }\n\treturn string(unsafe.Slice(ds.Ptr, int(ds.Size)))\n}\n\n")
-	buf.WriteString("func stringToDiscordString(s string) String {\n\treturn String{\n\t\tPtr: (*byte)(unsafe.Pointer(unsafe.StringData(s))),\n\t\tSize: uintptr(len(s)),\n\t}\n}\n\n")
+	buf.WriteString("func discordStringToString(ds *String) string {\n\tif ds == nil || ds.ptr == nil { return \"\" }\n\treturn string(unsafe.Slice(ds.ptr, int(ds.size)))\n}\n\n")
+	buf.WriteString("func stringToDiscordString(s string) String {\n\treturn String{\n\t\tptr: (*byte)(unsafe.Pointer(unsafe.StringData(s))),\n\t\tsize: uintptr(len(s)),\n\t}\n}\n\n")
 
 	enumNames := g.sortedEnumNames()
 	for _, name := range enumNames {
@@ -882,21 +896,21 @@ func (g *Generator) generate() {
 		goStructName := toGoType(name)
 		if ok, elem := g.isSpanType(name); ok {
 			goElem := toGoType(elem)
-			fmt.Fprintf(&buf, "type %s struct {\n\tPtr *%s\n\tSize uintptr\n}\n\n", goStructName, goElem)
+			fmt.Fprintf(&buf, "type %s struct {\n\tptr *%s\n\tsize uintptr\n}\n\n", goStructName, goElem)
 			fmt.Fprintf(&buf, "func %sToSlice(s %s) []%s {\n", goStructName, goStructName, goElem)
-			buf.WriteString("\tif s.Ptr == nil { return nil }\n")
-			buf.WriteString("\treturn unsafe.Slice(s.Ptr, int(s.Size))\n")
+			buf.WriteString("\tif s.ptr == nil { return nil }\n")
+			buf.WriteString("\treturn unsafe.Slice(s.ptr, int(s.size))\n")
 			buf.WriteString("}\n\n")
 			fmt.Fprintf(&buf, "func sliceTo%s(s []%s) %s {\n", goStructName, goElem, goStructName)
 			fmt.Fprintf(&buf, "\tif len(s) == 0 { return %s{} }\n", goStructName)
 			fmt.Fprintf(&buf, "\treturn %s{\n", goStructName)
-			buf.WriteString("\t\tPtr: &s[0],\n")
-			buf.WriteString("\t\tSize: uintptr(len(s)),\n")
+			buf.WriteString("\t\tptr: &s[0],\n")
+			buf.WriteString("\t\tsize: uintptr(len(s)),\n")
 			buf.WriteString("\t}\n}\n\n")
 			continue
 		}
 		if s.IsOpaque {
-			fmt.Fprintf(&buf, "type %s struct {\n\tOpaque unsafe.Pointer\n}\n\n", goStructName)
+			fmt.Fprintf(&buf, "type %s struct {\n\topaque unsafe.Pointer\n}\n\n", goStructName)
 			if hasInit[name] && hasDrop[name] {
 				fmt.Fprintf(&buf, "func New%s() *%s {\n\ts := &%s{}\n\ts.Init()\n\truntime.SetFinalizer(s, (*%s).Drop)\n\treturn s\n}\n\n", goStructName, goStructName, goStructName, goStructName)
 			}
@@ -909,7 +923,7 @@ func (g *Generator) generate() {
 				} else {
 					typeName = toGoType(typeName)
 				}
-				fmt.Fprintf(&buf, "\t%s %s\n", sanitizeGoName(f.Name), typeName)
+				fmt.Fprintf(&buf, "\t%s %s\n", sanitizeGoNamePrivate(f.Name), typeName)
 			}
 			buf.WriteString("}\n\n")
 			if hasInit[name] && hasDrop[name] {
@@ -938,7 +952,8 @@ func (g *Generator) generate() {
 		buf.WriteString(")")
 		if cb.ReturnType != "" {
 			goRetType := toGoType(cb.ReturnType)
-			buf.WriteString(" " + goRetType)
+			buf.WriteString(" ")
+			buf.WriteString(goRetType)
 		}
 		buf.WriteString("\n\n")
 	}
@@ -998,9 +1013,12 @@ func (g *Generator) generate() {
 			returnTypes = append(returnTypes, goRetType)
 		}
 		if len(returnTypes) == 1 {
-			buf.WriteString(" " + returnTypes[0])
+			buf.WriteString(" ")
+			buf.WriteString(returnTypes[0])
 		} else if len(returnTypes) > 1 {
-			buf.WriteString(" (" + strings.Join(returnTypes, ", ") + ")")
+			buf.WriteString(" (")
+			buf.WriteString(strings.Join(returnTypes, ", "))
+			buf.WriteString(")")
 		}
 		buf.WriteString(" {\n")
 		if f.ReturnsStruct {
@@ -1064,9 +1082,13 @@ func (g *Generator) generate() {
 		}
 		callStr := fmt.Sprintf("_%s(%s)", f.Name, strings.Join(callArgs, ", "))
 		if f.ReturnType == "" || f.ReturnsStruct {
-			buf.WriteString("\t" + callStr + "\n")
+			buf.WriteString("\t")
+			buf.WriteString(callStr)
+			buf.WriteString("\n")
 		} else {
-			buf.WriteString("\tres_c := " + callStr + "\n")
+			buf.WriteString("\tres_c := ")
+			buf.WriteString(callStr)
+			buf.WriteString("\n")
 		}
 		var retVars []string
 		if f.ReturnsStruct {
@@ -1086,7 +1108,9 @@ func (g *Generator) generate() {
 			}
 		}
 		if len(retVars) > 0 {
-			buf.WriteString("\treturn " + strings.Join(retVars, ", ") + "\n")
+			buf.WriteString("\treturn ")
+			buf.WriteString(strings.Join(retVars, ", "))
+			buf.WriteString("\n")
 		}
 		buf.WriteString("}\n\n")
 	}
