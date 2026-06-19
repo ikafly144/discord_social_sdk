@@ -26,9 +26,9 @@ func main() {
 
 	client := discord.NewClient()
 
-	client.AddLogCallback(func(arg0 string, arg1 discord.Discord_LoggingSeverity) {
+	client.AddLogCallback(func(arg0 string, arg1 discord.LoggingSeverity) {
 		fmt.Printf("[Discord SDK] %s\n", arg0)
-	}, discord.Discord_LoggingSeverity_Info)
+	}, discord.LoggingSeverityInfo)
 
 	client.SetApplicationId(appID)
 
@@ -41,12 +41,12 @@ func main() {
 		}
 	}()
 
-	client.SetStatusChangedCallback(func(status discord.Discord_Client_Status, err discord.Discord_Client_Error, errorDetails int32) {
-		if err != discord.Discord_Client_Error_None {
+	client.SetStatusChangedCallback(func(status discord.ClientStatus, err discord.ClientError, errorDetails int32) {
+		if err != discord.ClientErrorNone {
 			fmt.Printf("Status changed with error: %v (details: %d)\n", err, errorDetails)
 			return
 		}
-		if status != discord.Discord_Client_Status_Ready {
+		if status != discord.ClientStatusReady {
 			fmt.Printf("Status changed: %v\n", status)
 			return
 		}
@@ -59,7 +59,7 @@ func main() {
 		for _, r := range relationships {
 			u, ok := r.User()
 			if ok {
-				fmt.Printf("- %s (ID: %d) Type: %v\n", u.Username(), u.Id(), r.DiscordRelationshipType())
+				fmt.Printf("- %s (ID: %d) Type: %v\n", u.Username(), u.Id(), r.RelationshipType())
 			}
 		}
 	})
@@ -67,10 +67,10 @@ func main() {
 	codeVerifier := client.CreateAuthorizationCodeVerifier()
 	authArgs := discord.NewAuthorizationArgs()
 	authArgs.SetClientId(appID)
-	authArgs.SetScopes(discord.Client_GetDefaultCommunicationScopes())
+	authArgs.SetScopes(discord.ClientGetDefaultCommunicationScopes())
 	challenge := codeVerifier.Challenge()
 	authArgs.SetCodeChallenge(&challenge)
-	client.Authorize(authArgs, func(arg0 *discord.Discord_ClientResult, arg1, arg2 string) {
+	client.Authorize(authArgs, func(arg0 *discord.ClientResult, arg1, arg2 string) {
 		if !arg0.Successful() {
 			fmt.Printf("Authorization failed: %v\n", arg0.Error())
 			return
@@ -78,12 +78,12 @@ func main() {
 		fmt.Printf("Authorization successful! Code: %s, Redirect URI: %s\n", arg1, arg2)
 
 		client.GetToken(appID, arg1, codeVerifier.Verifier(), arg2,
-			func(arg0 *discord.Discord_ClientResult, accessToken, refreshToken string, tokenType discord.Discord_AuthorizationTokenType, expiresIn int32, scope string) {
+			func(arg0 *discord.ClientResult, accessToken, refreshToken string, tokenType discord.AuthorizationTokenType, expiresIn int32, scope string) {
 				if !arg0.Successful() {
 					fmt.Printf("Token exchange failed: %v\n", arg0.Error())
 					return
 				}
-				client.UpdateToken(tokenType, accessToken, func(arg0 *discord.Discord_ClientResult) {
+				client.UpdateToken(tokenType, accessToken, func(arg0 *discord.ClientResult) {
 					if !arg0.Successful() {
 						fmt.Printf("Failed to update token: %v\n", arg0.Error())
 						return
@@ -97,7 +97,7 @@ func main() {
 	client.RegisterLaunchCommand(appID, "awesome-go-wrapper://launch")
 
 	activity := discord.NewActivity()
-	activity.SetType(discord.Discord_ActivityTypes_Playing)
+	activity.SetType(discord.ActivityTypesPlaying)
 	activity.SetName("Go Wrapper Test")
 	activity.SetState("Working on Go Wrapper")
 	activity.SetDetails("Implementing Discord Social SDK")
@@ -106,14 +106,14 @@ func main() {
 	party.SetId("test123")
 	party.SetCurrentSize(1)
 	party.SetMaxSize(5)
-	party.SetPrivacy(discord.Discord_ActivityPartyPrivacy_Private)
+	party.SetPrivacy(discord.ActivityPartyPrivacyPrivate)
 	activity.SetParty(party)
 
 	secrets := discord.NewActivitySecrets()
 	secrets.SetJoin("joinSecret")
 	activity.SetSecrets(secrets)
 
-	client.UpdateRichPresence(activity, func(arg0 *discord.Discord_ClientResult) {
+	client.UpdateRichPresence(activity, func(arg0 *discord.ClientResult) {
 		if arg0.Successful() {
 			fmt.Println("Rich presence updated successfully")
 		} else {

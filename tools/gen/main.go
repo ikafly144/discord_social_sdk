@@ -82,6 +82,7 @@ type Callback struct {
 var currentGenerator *Generator
 var currentEnum *Enum
 var currentStruct *Struct
+var currentParamNames []string
 
 //export goVisitCursor
 func goVisitCursor(cursor, parent *C.CXCursor) C.enum_CXChildVisitResult {
@@ -228,8 +229,7 @@ func goVisitCursorStruct(c, p *C.CXCursor, clientData unsafe.Pointer) C.enum_CXC
 //export goVisitCallbackParams
 func goVisitCallbackParams(c, p *C.CXCursor, clientData unsafe.Pointer) C.enum_CXChildVisitResult {
 	if C.clang_getCursorKind(*c) == C.CXCursor_ParmDecl {
-		names := (*[]string)(clientData)
-		*names = append(*names, getString(C.clang_getCursorSpelling(*c)))
+		currentParamNames = append(currentParamNames, getString(C.clang_getCursorSpelling(*c)))
 	}
 	return C.CXChildVisit_Continue
 }
@@ -292,8 +292,10 @@ func (g *Generator) parseCallback(cursor C.CXCursor) {
 	}
 
 	numArgs := int(C.clang_getNumArgTypes(proto))
-	var paramNames []string
-	C.clang_visitChildren(cursor, C.CXCursorVisitor(C.visitCallbackParams), C.CXClientData(unsafe.Pointer(&paramNames)))
+	currentParamNames = nil
+	C.clang_visitChildren(cursor, C.CXCursorVisitor(C.visitCallbackParams), nil)
+	paramNames := currentParamNames
+	currentParamNames = nil
 
 	var sigParts []string
 	for i := 0; i < numArgs; i++ {
@@ -493,11 +495,42 @@ func sanitizeGoName(name string) string {
 	if name == "" {
 		return ""
 	}
-	res := strings.ToUpper(name[:1]) + name[1:]
+	parts := strings.Split(name, "_")
+	var res string
+	for _, p := range parts {
+		if p == "" {
+			continue
+		}
+		res += strings.ToUpper(p[:1]) + p[1:]
+	}
+	if res == "" {
+		return ""
+	}
 	if goKeywords[res] {
 		return res + "_"
 	}
 	return res
+}
+
+func stripDiscordPrefix(name string) string {
+	return strings.TrimPrefix(name, "Discord_")
+}
+
+func toGoType(typeName string) string {
+	if strings.HasPrefix(typeName, "*") {
+		return "*" + toGoType(strings.TrimPrefix(typeName, "*"))
+	}
+	if strings.HasPrefix(typeName, "[]") {
+		return "[]" + toGoType(strings.TrimPrefix(typeName, "[]"))
+	}
+
+	stripped := stripDiscordPrefix(typeName)
+	switch stripped {
+	case "uintptr", "unsafe.Pointer", "string", "bool", "int", "uint", "int8", "uint8", "int16", "uint16", "int32", "uint32", "int64", "uint64", "float32", "float64":
+		return stripped
+	}
+
+	return sanitizeGoName(stripped)
 }
 
 func (g *Generator) mapCTypeStringToGo(cType string) string {
@@ -582,7 +615,7 @@ func (g *Generator) generate() {
 
 	buf.WriteString("var (\n")
 	for _, f := range g.functions {
-		buf.WriteString(fmt.Sprintf("\t_%s func(", f.Name))
+		fmt.Fprintf(&buf, "\t_%s func(", f.Name)
 		first := true
 		if f.ReturnsStruct && runtime.GOARCH == "amd64" {
 			buf.WriteString("uintptr") // The out-pointer for struct return
@@ -594,7 +627,7 @@ func (g *Generator) generate() {
 			}
 			first = false
 			t := g.mapToFFIType(arg.Type, arg.CType)
-			buf.WriteString(t)
+			buf.WriteString(toGoType(t))
 		}
 		if f.OutArg != nil {
 			if !first {
@@ -604,7 +637,7 @@ func (g *Generator) generate() {
 		}
 		buf.WriteString(")")
 		if f.ReturnType != "" && !f.ReturnsStruct {
-			buf.WriteString(" " + g.mapToFFIType(f.ReturnType, f.CReturnType))
+			buf.WriteString(" " + toGoType(g.mapToFFIType(f.ReturnType, f.CReturnType)))
 		}
 		buf.WriteString("\n")
 	}
@@ -612,7 +645,7 @@ func (g *Generator) generate() {
 
 	buf.WriteString("func registerFunctions() {\n")
 	for _, f := range g.functions {
-		buf.WriteString(fmt.Sprintf("\tpurego.RegisterLibFunc(&_%s, libHandle, %q)\n", f.Name, f.Name))
+		fmt.Fprintf(&buf, "\tpurego.RegisterLibFunc(&_%s, libHandle, %q)\n", f.Name, f.Name)
 	}
 	buf.WriteString("}\n\n")
 
@@ -632,7 +665,6 @@ func (g *Generator) generate() {
 			if arg.CType == "Discord_FreeFn" || arg.Type == "unsafe.Pointer" {
 				continue
 			}
-			// Just inject a dummy voidPtr if it's missing but referenced
 		}
 	}
 	// Manually ensure gateway_voidPtr is generated, it's used for generic free callbacks etc.
@@ -662,22 +694,22 @@ func (g *Generator) generate() {
 			}
 			gatewayName := "gateway_" + cb.Name
 			generatedGateways[gatewayName] = true
-			buf.WriteString(fmt.Sprintf("func %s(", gatewayName))
+			fmt.Fprintf(&buf, "func %s(", gatewayName)
 			for i := range cb.Args {
 				if i > 0 {
 					buf.WriteString(", ")
 				}
-				buf.WriteString(fmt.Sprintf("arg%d uintptr", i))
+				fmt.Fprintf(&buf, "arg%d uintptr", i)
 			}
 			buf.WriteString(")")
 			buf.WriteString(" uintptr")
 			buf.WriteString(" {\n")
 			buf.WriteString("\tcallbackMu.Lock()\n")
-			buf.WriteString(fmt.Sprintf("\tcbRaw, ok := callbackRegistry[arg%d]\n", userDataVar))
+			fmt.Fprintf(&buf, "\tcbRaw, ok := callbackRegistry[arg%d]\n", userDataVar)
 			buf.WriteString("\tcallbackMu.Unlock()\n")
 			buf.WriteString("\tif !ok { return 0 }\n")
 
-			buf.WriteString(fmt.Sprintf("\tcb := cbRaw.(%s)\n", cb.Name))
+			fmt.Fprintf(&buf, "\tcb := cbRaw.(%s)\n", toGoType(cb.Name))
 
 			if cb.ReturnType != "" {
 				buf.WriteString("\tres_go := ")
@@ -695,15 +727,18 @@ func (g *Generator) generate() {
 				}
 				first = false
 				if arg.Type == "string" {
-					buf.WriteString(fmt.Sprintf("discordStringToString((*Discord_String)(unsafe.Pointer(arg%d)))", i))
+					fmt.Fprintf(&buf, "discordStringToString((*String)(unsafe.Pointer(arg%d)))", i)
 				} else if g.isKnownStruct(arg.Type) || strings.HasSuffix(arg.CType, "Span") {
-					buf.WriteString(fmt.Sprintf("*(*%s)(unsafe.Pointer(arg%d))", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "*(*%s)(unsafe.Pointer(arg%d))", goArgType, i)
 				} else if strings.HasPrefix(arg.Type, "*") {
-					buf.WriteString(fmt.Sprintf("(%s)(unsafe.Pointer(arg%d))", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "(%s)(unsafe.Pointer(arg%d))", goArgType, i)
 				} else if arg.IsBool {
-					buf.WriteString(fmt.Sprintf("arg%d != 0", i))
+					fmt.Fprintf(&buf, "arg%d != 0", i)
 				} else {
-					buf.WriteString(fmt.Sprintf("%s(arg%d)", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "%s(arg%d)", goArgType, i)
 				}
 			}
 			buf.WriteString(")\n")
@@ -733,18 +768,18 @@ func (g *Generator) generate() {
 				continue
 			}
 			generatedGateways[gatewayName] = true
-			buf.WriteString(fmt.Sprintf("func %s(", gatewayName))
+			fmt.Fprintf(&buf, "func %s(", gatewayName)
 			for i := range cb.Args {
 				if i > 0 {
 					buf.WriteString(", ")
 				}
-				buf.WriteString(fmt.Sprintf("arg%d uintptr", i))
+				fmt.Fprintf(&buf, "arg%d uintptr", i)
 			}
 			buf.WriteString(")")
 			buf.WriteString(" uintptr")
 			buf.WriteString(" {\n")
 			buf.WriteString("\tcallbackMu.Lock()\n")
-			buf.WriteString(fmt.Sprintf("\tcbRaw, ok := callbackRegistry[arg%d]\n", userDataVar))
+			fmt.Fprintf(&buf, "\tcbRaw, ok := callbackRegistry[arg%d]\n", userDataVar)
 			buf.WriteString("\tcallbackMu.Unlock()\n")
 			buf.WriteString("\tif !ok { return 0 }\n")
 
@@ -759,11 +794,13 @@ func (g *Generator) generate() {
 					buf.WriteString(", ")
 				}
 				first = false
-				buf.WriteString(arg.Type)
+				goArgType := toGoType(arg.Type)
+				buf.WriteString(goArgType)
 			}
 			buf.WriteString(")")
 			if cb.ReturnType != "" {
-				buf.WriteString(" " + cb.ReturnType)
+				goRetType := toGoType(cb.ReturnType)
+				buf.WriteString(" " + goRetType)
 			}
 			buf.WriteString(")\n")
 
@@ -783,15 +820,18 @@ func (g *Generator) generate() {
 				}
 				first = false
 				if arg.Type == "string" {
-					buf.WriteString(fmt.Sprintf("discordStringToString((*Discord_String)(unsafe.Pointer(arg%d)))", i))
+					fmt.Fprintf(&buf, "discordStringToString((*String)(unsafe.Pointer(arg%d)))", i)
 				} else if g.isKnownStruct(arg.Type) || strings.HasSuffix(arg.CType, "Span") {
-					buf.WriteString(fmt.Sprintf("*(*%s)(unsafe.Pointer(arg%d))", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "*(*%s)(unsafe.Pointer(arg%d))", goArgType, i)
 				} else if strings.HasPrefix(arg.Type, "*") {
-					buf.WriteString(fmt.Sprintf("(%s)(unsafe.Pointer(arg%d))", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "(%s)(unsafe.Pointer(arg%d))", goArgType, i)
 				} else if arg.IsBool {
-					buf.WriteString(fmt.Sprintf("arg%d != 0", i))
+					fmt.Fprintf(&buf, "arg%d != 0", i)
 				} else {
-					buf.WriteString(fmt.Sprintf("%s(arg%d)", arg.Type, i))
+					goArgType := toGoType(arg.Type)
+					fmt.Fprintf(&buf, "%s(arg%d)", goArgType, i)
 				}
 			}
 			buf.WriteString(")\n")
@@ -804,10 +844,8 @@ func (g *Generator) generate() {
 		}
 	}
 
-	// Manual generic voidPtr callback block removed because uniqueSigs handles it now.
-
-	buf.WriteString("func discordStringToString(ds *Discord_String) string {\n\tif ds == nil || ds.Ptr == nil { return \"\" }\n\treturn string(unsafe.Slice(ds.Ptr, int(ds.Size)))\n}\n\n")
-	buf.WriteString("func stringToDiscordString(s string) Discord_String {\n\treturn Discord_String{\n\t\tPtr: (*byte)(unsafe.Pointer(unsafe.StringData(s))),\n\t\tSize: uintptr(len(s)),\n\t}\n}\n\n")
+	buf.WriteString("func discordStringToString(ds *String) string {\n\tif ds == nil || ds.Ptr == nil { return \"\" }\n\treturn string(unsafe.Slice(ds.Ptr, int(ds.Size)))\n}\n\n")
+	buf.WriteString("func stringToDiscordString(s string) String {\n\treturn String{\n\t\tPtr: (*byte)(unsafe.Pointer(unsafe.StringData(s))),\n\t\tSize: uintptr(len(s)),\n\t}\n}\n\n")
 
 	enumNames := g.sortedEnumNames()
 	for _, name := range enumNames {
@@ -815,12 +853,14 @@ func (g *Generator) generate() {
 		if strings.HasSuffix(e.Name, "_forceint") {
 			continue
 		}
-		buf.WriteString(fmt.Sprintf("type %s int32\n\nconst (\n", e.Name))
+		goEnumName := toGoType(e.Name)
+		fmt.Fprintf(&buf, "type %s int32\n\nconst (\n", goEnumName)
 		for _, v := range e.Values {
 			if strings.HasSuffix(v.Name, "_forceint") {
 				continue
 			}
-			buf.WriteString(fmt.Sprintf("\t%s %s = %d\n", v.Name, e.Name, v.Value))
+			goValName := toGoType(v.Name)
+			fmt.Fprintf(&buf, "\t%s %s = %d\n", goValName, goEnumName, v.Value)
 		}
 		buf.WriteString(")\n\n")
 	}
@@ -839,37 +879,41 @@ func (g *Generator) generate() {
 	structNames := g.sortedStructNames()
 	for _, name := range structNames {
 		s := g.structs[name]
+		goStructName := toGoType(name)
 		if ok, elem := g.isSpanType(name); ok {
-			buf.WriteString(fmt.Sprintf("type %s struct {\n\tPtr *%s\n\tSize uintptr\n}\n\n", name, elem))
-			buf.WriteString(fmt.Sprintf("func %sToSlice(s %s) []%s {\n", name, name, elem))
-			buf.WriteString(fmt.Sprintf("\tif s.Ptr == nil { return nil }\n"))
-			buf.WriteString(fmt.Sprintf("\treturn unsafe.Slice(s.Ptr, int(s.Size))\n"))
+			goElem := toGoType(elem)
+			fmt.Fprintf(&buf, "type %s struct {\n\tPtr *%s\n\tSize uintptr\n}\n\n", goStructName, goElem)
+			fmt.Fprintf(&buf, "func %sToSlice(s %s) []%s {\n", goStructName, goStructName, goElem)
+			buf.WriteString("\tif s.Ptr == nil { return nil }\n")
+			buf.WriteString("\treturn unsafe.Slice(s.Ptr, int(s.Size))\n")
 			buf.WriteString("}\n\n")
-			buf.WriteString(fmt.Sprintf("func sliceTo%s(s []%s) %s {\n", name, elem, name))
-			buf.WriteString(fmt.Sprintf("\tif len(s) == 0 { return %s{} }\n", name))
-			buf.WriteString(fmt.Sprintf("\treturn %s{\n", name))
-			buf.WriteString(fmt.Sprintf("\t\tPtr: &s[0],\n"))
+			fmt.Fprintf(&buf, "func sliceTo%s(s []%s) %s {\n", goStructName, goElem, goStructName)
+			fmt.Fprintf(&buf, "\tif len(s) == 0 { return %s{} }\n", goStructName)
+			fmt.Fprintf(&buf, "\treturn %s{\n", goStructName)
+			buf.WriteString("\t\tPtr: &s[0],\n")
 			buf.WriteString("\t\tSize: uintptr(len(s)),\n")
 			buf.WriteString("\t}\n}\n\n")
 			continue
 		}
 		if s.IsOpaque {
-			buf.WriteString(fmt.Sprintf("type %s struct {\n\tOpaque unsafe.Pointer\n}\n\n", s.Name))
+			fmt.Fprintf(&buf, "type %s struct {\n\tOpaque unsafe.Pointer\n}\n\n", goStructName)
 			if hasInit[name] && hasDrop[name] {
-				buf.WriteString(fmt.Sprintf("func New%s() *%s {\n\ts := &%s{}\n\ts.Init()\n\truntime.SetFinalizer(s, (*%s).Drop)\n\treturn s\n}\n\n", strings.TrimPrefix(name, "Discord_"), name, name, name))
+				fmt.Fprintf(&buf, "func New%s() *%s {\n\ts := &%s{}\n\ts.Init()\n\truntime.SetFinalizer(s, (*%s).Drop)\n\treturn s\n}\n\n", goStructName, goStructName, goStructName, goStructName)
 			}
 		} else {
-			buf.WriteString(fmt.Sprintf("type %s struct {\n", s.Name))
+			fmt.Fprintf(&buf, "type %s struct {\n", goStructName)
 			for _, f := range s.Fields {
 				typeName := g.mapCTypeStringToGo(f.Type)
 				if _, isCb := g.callbacks[typeName]; isCb {
 					typeName = "uintptr"
+				} else {
+					typeName = toGoType(typeName)
 				}
-				buf.WriteString(fmt.Sprintf("\t%s %s\n", sanitizeGoName(f.Name), typeName))
+				fmt.Fprintf(&buf, "\t%s %s\n", sanitizeGoName(f.Name), typeName)
 			}
 			buf.WriteString("}\n\n")
 			if hasInit[name] && hasDrop[name] {
-				buf.WriteString(fmt.Sprintf("func New%s() *%s {\n\ts := &%s{}\n\ts.Init()\n\truntime.SetFinalizer(s, (*%s).Drop)\n\treturn s\n}\n\n", strings.TrimPrefix(name, "Discord_"), name, name, name))
+				fmt.Fprintf(&buf, "func New%s() *%s {\n\ts := &%s{}\n\ts.Init()\n\truntime.SetFinalizer(s, (*%s).Drop)\n\treturn s\n}\n\n", goStructName, goStructName, goStructName, goStructName)
 			}
 		}
 	}
@@ -877,7 +921,8 @@ func (g *Generator) generate() {
 	cbNames := g.sortedCallbackNames()
 	for _, name := range cbNames {
 		cb := g.callbacks[name]
-		buf.WriteString(fmt.Sprintf("type %s func(", name))
+		goCbName := toGoType(name)
+		fmt.Fprintf(&buf, "type %s func(", goCbName)
 		first := true
 		for _, arg := range cb.Args {
 			if strings.Contains(arg.Name, "userData") {
@@ -887,11 +932,13 @@ func (g *Generator) generate() {
 				buf.WriteString(", ")
 			}
 			first = false
-			buf.WriteString(fmt.Sprintf("%s %s", sanitizeGoName(arg.Name), arg.Type))
+			goArgType := toGoType(arg.Type)
+			fmt.Fprintf(&buf, "%s %s", sanitizeGoName(arg.Name), goArgType)
 		}
 		buf.WriteString(")")
 		if cb.ReturnType != "" {
-			buf.WriteString(" " + cb.ReturnType)
+			goRetType := toGoType(cb.ReturnType)
+			buf.WriteString(" " + goRetType)
 		}
 		buf.WriteString("\n\n")
 	}
@@ -900,14 +947,13 @@ func (g *Generator) generate() {
 		if !strings.HasPrefix(f.Name, "Discord_") {
 			continue
 		}
-		goName := strings.TrimPrefix(f.Name, "Discord_")
+		origGoName := strings.TrimPrefix(f.Name, "Discord_")
+		goName := sanitizeGoName(origGoName)
 		isMethod, receiverName, receiverType := false, "", ""
 		if len(f.Args) > 0 && strings.HasPrefix(f.Args[0].Type, "*Discord_") {
-			isMethod, receiverType = true, f.Args[0].Type
-			structName := strings.TrimPrefix(receiverType, "*")
-			if strings.HasPrefix(goName, structName[8:]+"_") {
-				goName = strings.TrimPrefix(goName, structName[8:]+"_")
-			}
+			isMethod, receiverType = true, toGoType(f.Args[0].Type)
+			structNameStripped := stripDiscordPrefix(strings.TrimPrefix(f.Args[0].Type, "*"))
+			goName = strings.TrimPrefix(goName, structNameStripped)
 			receiverName = "self"
 		}
 		var filteredArgs []Arg
@@ -919,32 +965,37 @@ func (g *Generator) generate() {
 		}
 		buf.WriteString("func ")
 		if isMethod {
-			buf.WriteString(fmt.Sprintf("(%s %s) %s(", receiverName, receiverType, goName))
+			fmt.Fprintf(&buf, "(%s %s) %s(", receiverName, receiverType, goName)
 			for i := 1; i < len(filteredArgs); i++ {
 				if i > 1 {
 					buf.WriteString(", ")
 				}
-				buf.WriteString(fmt.Sprintf("%s %s", sanitizeGoName(filteredArgs[i].Name), filteredArgs[i].Type))
+				goArgType := toGoType(filteredArgs[i].Type)
+				fmt.Fprintf(&buf, "%s %s", sanitizeGoName(filteredArgs[i].Name), goArgType)
 			}
 		} else {
-			buf.WriteString(fmt.Sprintf("%s(", goName))
+			fmt.Fprintf(&buf, "%s(", goName)
 			for i, arg := range filteredArgs {
 				if i > 0 {
 					buf.WriteString(", ")
 				}
-				buf.WriteString(fmt.Sprintf("%s %s", sanitizeGoName(arg.Name), arg.Type))
+				goArgType := toGoType(arg.Type)
+				fmt.Fprintf(&buf, "%s %s", sanitizeGoName(arg.Name), goArgType)
 			}
 		}
 		buf.WriteString(")")
 		var returnTypes []string
 		if f.ReturnsStruct {
-			returnTypes = append(returnTypes, f.ReturnType)
+			goRetType := toGoType(f.ReturnType)
+			returnTypes = append(returnTypes, goRetType)
 		}
 		if f.OutArg != nil {
-			returnTypes = append(returnTypes, f.OutArg.Type)
+			goOutType := toGoType(f.OutArg.Type)
+			returnTypes = append(returnTypes, goOutType)
 		}
 		if f.ReturnType != "" && !f.ReturnsStruct {
-			returnTypes = append(returnTypes, f.ReturnType)
+			goRetType := toGoType(f.ReturnType)
+			returnTypes = append(returnTypes, goRetType)
 		}
 		if len(returnTypes) == 1 {
 			buf.WriteString(" " + returnTypes[0])
@@ -953,10 +1004,12 @@ func (g *Generator) generate() {
 		}
 		buf.WriteString(" {\n")
 		if f.ReturnsStruct {
-			buf.WriteString(fmt.Sprintf("\tvar res_ret %s\n", f.ReturnType))
+			goRetType := toGoType(f.ReturnType)
+			fmt.Fprintf(&buf, "\tvar res_ret %s\n", goRetType)
 		}
 		if f.OutArg != nil {
-			buf.WriteString(fmt.Sprintf("\tvar res_out %s\n", f.OutArg.Type))
+			goOutType := toGoType(f.OutArg.Type)
+			fmt.Fprintf(&buf, "\tvar res_out %s\n", goOutType)
 		}
 		var callArgs []string
 		if f.ReturnsStruct && runtime.GOARCH == "amd64" {
@@ -976,7 +1029,7 @@ func (g *Generator) generate() {
 				for _, a := range f.Args {
 					if _, ok := g.callbacks[a.Type]; ok {
 						targetCb = &a
-						buf.WriteString(fmt.Sprintf("\tptr_%s := registerCallback(%s)\n", arg.Name, sanitizeGoName(a.Name)))
+						fmt.Fprintf(&buf, "\tptr_%s := registerCallback(%s)\n", arg.Name, sanitizeGoName(a.Name))
 						callArgs = append(callArgs, fmt.Sprintf("uintptr(ptr_%s)", arg.Name))
 						break
 					}
@@ -986,21 +1039,21 @@ func (g *Generator) generate() {
 				}
 				continue
 			}
-			targetFFIType := g.mapToFFIType(arg.Type, arg.CType)
+			targetFFIType := toGoType(g.mapToFFIType(arg.Type, arg.CType))
 			if _, ok := g.callbacks[arg.Type]; ok {
-				buf.WriteString(fmt.Sprintf("\tcb_%s := purego.NewCallback(gateway_%s)\n", argVar, arg.Type))
+				fmt.Fprintf(&buf, "\tcb_%s := purego.NewCallback(gateway_%s)\n", argVar, arg.Type)
 				callArgs = append(callArgs, fmt.Sprintf("cb_%s", argVar))
 				continue
 			}
 			if arg.Type == "string" {
-				buf.WriteString(fmt.Sprintf("\tc_%s := stringToDiscordString(%s)\n", argVar, argVar))
+				fmt.Fprintf(&buf, "\tc_%s := stringToDiscordString(%s)\n", argVar, argVar)
 				callArgs = append(callArgs, fmt.Sprintf("uintptr(unsafe.Pointer(&c_%s))", argVar))
 			} else if g.isKnownStruct(arg.Type) || strings.HasSuffix(arg.CType, "Span") {
 				callArgs = append(callArgs, fmt.Sprintf("uintptr(unsafe.Pointer(&%s))", argVar))
 			} else if strings.HasPrefix(arg.Type, "*") {
 				callArgs = append(callArgs, fmt.Sprintf("uintptr(unsafe.Pointer(%s))", argVar))
 			} else if arg.IsBool {
-				buf.WriteString(fmt.Sprintf("\tvar b_%s uintptr\n\tif %s { b_%s = 1 }\n", argVar, argVar, argVar))
+				fmt.Fprintf(&buf, "\tvar b_%s uintptr\n\tif %s { b_%s = 1 }\n", argVar, argVar, argVar)
 				callArgs = append(callArgs, fmt.Sprintf("b_%s", argVar))
 			} else {
 				callArgs = append(callArgs, fmt.Sprintf("%s(%s)", targetFFIType, argVar))
@@ -1023,12 +1076,13 @@ func (g *Generator) generate() {
 			retVars = append(retVars, "res_out")
 		}
 		if f.ReturnType != "" && !f.ReturnsStruct {
+			goRetType := toGoType(f.ReturnType)
 			if f.ReturnType == "string" {
-				retVars = append(retVars, "discordStringToString((*Discord_String)(unsafe.Pointer(res_c)))")
+				retVars = append(retVars, "discordStringToString((*String)(unsafe.Pointer(res_c)))")
 			} else if f.ReturnIsBool {
 				retVars = append(retVars, "res_c != 0")
 			} else {
-				retVars = append(retVars, fmt.Sprintf("%s(res_c)", f.ReturnType))
+				retVars = append(retVars, fmt.Sprintf("%s(res_c)", goRetType))
 			}
 		}
 		if len(retVars) > 0 {
@@ -1040,10 +1094,14 @@ func (g *Generator) generate() {
 	formatted, err := format.Source(buf.Bytes())
 	if err != nil {
 		fmt.Printf("Warning: could not format source: %v\n", err)
-		os.WriteFile("discord.go.err", buf.Bytes(), 0644)
+		if err := os.WriteFile("discord.go.err", buf.Bytes(), 0644); err != nil {
+			fmt.Printf("Error writing discord.go.err: %v\n", err)
+		}
 		return
 	}
-	os.WriteFile("discord.go", formatted, 0644)
+	if err := os.WriteFile("discord.go", formatted, 0644); err != nil {
+		log.Fatalf("Error writing discord.go: %v", err)
+	}
 	fmt.Println("Generated discord.go")
 
 	// Generate OS-specific helpers
@@ -1054,8 +1112,12 @@ func (g *Generator) generateLibraryHelpers() {
 	windowsBuf := []byte("// Code generated by gen; DO NOT EDIT.\n\n//go:build windows\n\npackage discord\n\nimport \"syscall\"\n\nfunc openLibraryInternal(name string) (uintptr, error) {\n\th, err := syscall.LoadLibrary(name)\n\treturn uintptr(h), err\n}\n")
 	unixBuf := []byte("// Code generated by gen; DO NOT EDIT.\n\n//go:build !windows\n\npackage discord\n\nimport \"github.com/ebitengine/purego\"\n\nfunc openLibraryInternal(name string) (uintptr, error) {\n\treturn purego.Dlopen(name, purego.RTLD_NOW)\n}\n")
 
-	os.WriteFile("load_windows.go", windowsBuf, 0644)
-	os.WriteFile("load_unix.go", unixBuf, 0644)
+	if err := os.WriteFile("load_windows.go", windowsBuf, 0644); err != nil {
+		log.Fatalf("Error writing load_windows.go: %v", err)
+	}
+	if err := os.WriteFile("load_unix.go", unixBuf, 0644); err != nil {
+		log.Fatalf("Error writing load_unix.go: %v", err)
+	}
 }
 
 func (g *Generator) isKnownStruct(name string) bool { _, ok := g.structs[name]; return ok }
