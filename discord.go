@@ -36,13 +36,10 @@ func loadLibrary() (uintptr, error) {
 	default:
 		name = "libdiscord_partner_sdk.so"
 	}
-	// Try to find it in sdk/lib/release
 	exe, _ := os.Executable()
 	paths := []string{
 		name,
 		filepath.Join(filepath.Dir(exe), name),
-		filepath.Join(filepath.Dir(exe), "sdk", "lib", "release", name),
-		filepath.Join("sdk", "lib", "release", name),
 	}
 	for _, path := range paths {
 		h, err := openLibraryInternal(path)

@@ -59,7 +59,7 @@ func main() {
 		for _, r := range relationships {
 			u, ok := r.User()
 			if ok {
-				fmt.Printf("- %s (ID: %d) Type: %v\n", u.Username(), u.Id(), r.RelationshipType())
+				fmt.Printf("- %s (ID: %d) Type: %v\n", u.Username(), u.Id(), r.DiscordRelationshipType())
 			}
 		}
 	})
